@@ -1,14 +1,60 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { dashboardApi, DashboardStats } from "@/store/apis";
 import { colors } from "@/utils/color";
 import { FiUsers, FiShoppingBag, FiPackage, FiDollarSign } from "react-icons/fi";
 
 export default function DashboardPage() {
-  const stats = [
-    { label: "Total Users", value: "1,234", icon: FiUsers, color: colors.primeGreen },
-    { label: "Total Sellers", value: "567", icon: FiShoppingBag, color: colors.primeGold },
-    { label: "Total Orders", value: "8,901", icon: FiPackage, color: colors.secondaryGreen },
-    { label: "Revenue", value: "$45,678", icon: FiDollarSign, color: colors.primeGold },
+  const [stats, setStats] = useState<DashboardStats>({
+    customers: 0,
+    sellers: 0,
+    products: 0,
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      setIsLoading(true);
+      const response = await dashboardApi.getAllStats();
+      setStats(response);
+    } catch (error: any) {
+      setError(error.response?.data?.error || "Failed to fetch dashboard stats");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const statsCards = [
+    { 
+      label: "Total Customers", 
+      value: isLoading ? "..." : stats.customers.toLocaleString(), 
+      icon: FiUsers, 
+      color: colors.primeGreen 
+    },
+    { 
+      label: "Total Sellers", 
+      value: isLoading ? "..." : stats.sellers.toLocaleString(), 
+      icon: FiShoppingBag, 
+      color: colors.primeGold 
+    },
+    { 
+      label: "Total Products", 
+      value: isLoading ? "..." : stats.products.toLocaleString(), 
+      icon: FiPackage, 
+      color: colors.secondaryGreen 
+    },
+    { 
+      label: "Revenue", 
+      value: "Coming Soon", 
+      icon: FiDollarSign, 
+      color: colors.primeGold 
+    },
   ];
 
   return (
@@ -23,9 +69,16 @@ export default function DashboardPage() {
         </p>
       </div>
 
+      {/* Error Message */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg font-poppins">
+          {error}
+        </div>
+      )}
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat) => (
+        {statsCards.map((stat) => (
           <div
             key={stat.label}
             className="bg-white rounded-lg shadow-md p-6 border-l-4"

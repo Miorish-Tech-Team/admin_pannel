@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/atoms";
@@ -12,7 +12,7 @@ import { colors } from "@/utils/color";
 import { FiPlus, FiEdit, FiTrash2, FiEye, FiFilter, FiX } from "react-icons/fi";
 import Image from "next/image";
 
-export default function ProductsPage() {
+function ProductsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const toast = useToast();
@@ -699,5 +699,13 @@ export default function ProductsPage() {
         isLoading={isBulkDeleting}
       />
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<TableSkeleton />}>
+      <ProductsPageContent />
+    </Suspense>
   );
 }

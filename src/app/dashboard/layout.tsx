@@ -20,7 +20,7 @@ export default function DashboardLayout({
       <div className="lg:ml-64 min-h-screen">
         {/* Top Bar */}
         <header
-          className="lg:hidden block sticky top-0 z-30 h-16 flex items-center justify-between px-6 shadow-sm"
+          className="lg:hidden sticky top-0 z-30 h-16 flex items-center justify-between px-6 shadow-sm"
           style={{ backgroundColor: colors.white }}
         >
           <button

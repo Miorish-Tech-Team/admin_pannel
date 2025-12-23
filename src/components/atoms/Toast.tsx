@@ -118,11 +118,11 @@ const Toast: React.FC<ToastProps> = ({
       className={`flex items-center gap-3 min-w-[300px] max-w-md p-4 mb-3 text-white rounded-lg shadow-lg border-l-4 ${getToastStyles()} animate-slideIn`}
       role="alert"
     >
-      <div className="flex-shrink-0">{getIcon()}</div>
+      <div className="shrink-0">{getIcon()}</div>
       <div className="flex-1 text-sm font-medium">{message}</div>
       <button
         onClick={() => onClose(id)}
-        className="flex-shrink-0 ml-2 text-white hover:text-gray-200 transition-colors"
+        className="shrink-0 ml-2 text-white hover:text-gray-200 transition-colors"
         aria-label="Close"
       >
         <svg
