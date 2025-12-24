@@ -67,8 +67,9 @@ function ProductsPageContent() {
   const fetchProducts = async () => {
     try {
       setIsLoading(true);
-      const data = await productApi.getAllProducts();
-      setProducts(data);
+      // Fetch with pagination for better performance
+      const data = await productApi.getAllProducts(1, 50);
+      setProducts(data.products || data);
     } catch (error: any) {
       setError(error.response?.data?.message || "Failed to fetch products");
     } finally {

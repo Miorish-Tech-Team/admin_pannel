@@ -23,6 +23,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <input
           ref={ref}
+          onWheel={(e) => (e.target as HTMLInputElement).blur()}
           className={`w-full px-4 py-2 border rounded-lg font-poppins text-base transition-all duration-200 focus:outline-none focus:ring-1 ${className}`}
           style={{
             borderColor: error ? colors.primeRed : "#D1D5DB", 

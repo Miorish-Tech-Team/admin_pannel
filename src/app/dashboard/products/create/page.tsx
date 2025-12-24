@@ -49,10 +49,10 @@ export default function CreateProductPage() {
 
   const [files, setFiles] = useState<{
     coverImage: File | null;
-    galleryImages: File[];
+   
   }>({
     coverImage: null,
-    galleryImages: [],
+   
   });
 
   const [tags, setTags] = useState<string[]>([]);
@@ -103,18 +103,10 @@ export default function CreateProductPage() {
 
     if (name === "coverImage") {
       setFiles((prev) => ({ ...prev, coverImage: selectedFiles[0] }));
-    } else if (name === "galleryImages") {
-      const fileArray = Array.from(selectedFiles).slice(0, 5);
-      setFiles((prev) => ({ ...prev, galleryImages: fileArray }));
     }
   };
 
-  const handleRemoveGalleryImage = (indexToRemove: number) => {
-    setFiles((prev) => ({
-      ...prev,
-      galleryImages: prev.galleryImages.filter((_, index) => index !== indexToRemove)
-    }));
-  };
+
 
   const handleAddTag = () => {
     if (tagInput.trim() && !tags.includes(tagInput.trim())) {
@@ -172,10 +164,6 @@ export default function CreateProductPage() {
         availableStockQuantity: Number(formData.availableStockQuantity) || 0,
         coverImageUrl: files.coverImage,
       };
-
-      if (files.galleryImages.length > 0) {
-        payload.galleryImageUrls = files.galleryImages;
-      }
 
       if (formData.productDiscountPercentage) {
         payload.productDiscountPercentage = Number(formData.productDiscountPercentage);
@@ -668,78 +656,7 @@ export default function CreateProductPage() {
             </div>
           </div>
 
-          {/* Gallery Images */}
-          <div>
-            <label className="block text-sm font-medium font-poppins mb-2" style={{ color: themeColors.darkgray }}>
-              Gallery Images (Max 5)
-            </label>
-            
-            {/* Preview of Selected Images */}
-            {files.galleryImages.length > 0 && (
-              <div className="mb-4">
-                <p className="text-sm font-poppins text-gray-600 mb-2">
-                  Selected {files.galleryImages.length} image(s):
-                </p>
-                <div className="grid grid-cols-5 gap-2 mb-3">
-                  {files.galleryImages.map((file, index) => (
-                    <div key={index} className="relative aspect-square rounded-lg overflow-hidden border-2 border-green-500">
-                      <Image 
-                        src={URL.createObjectURL(file)} 
-                        alt={`Preview ${index + 1}`} 
-                        fill 
-                        sizes="100px" 
-                        className="object-cover"
-                        unoptimized
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveGalleryImage(index)}
-                        className="absolute top-1 right-1 p-1 bg-red-500 rounded-full text-white hover:bg-red-600 transition-colors"
-                        title="Remove image"
-                      >
-                        <FiX size={14} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-              <input
-                type="file"
-                name="galleryImages"
-                accept="image/*"
-                multiple
-                onChange={handleFileChange}
-                className="hidden"
-                id="galleryImages"
-              />
-              <label
-                htmlFor="galleryImages"
-                className="cursor-pointer flex flex-col items-center gap-2"
-              >
-                <FiUpload size={32} style={{ color: themeColors.primeGold }} />
-                <span className="font-poppins" style={{ color: themeColors.darkgray }}>
-                  {files.galleryImages.length > 0
-                    ? "Click to select different images"
-                    : "Click to upload gallery images (up to 5)"}
-                </span>
-                <span className="text-xs text-gray-500 font-poppins">
-                  You can select multiple images at once
-                </span>
-              </label>
-            </div>
-          </div>
-
-          {/* Video URL */}
-          {/* <Input
-            label="Product Video URL"
-            name="productVideoUrl"
-            value={formData.productVideoUrl}
-            onChange={handleChange}
-            placeholder="https://youtube.com/..."
-          /> */}
+        
         </div>
 
         {/* Submit Buttons */}

@@ -5,6 +5,7 @@ export interface User {
   fullName: string;
   email: string;
   phone?: string;
+  role?: string;
   canReview?: boolean;
   authProvider: string;
   status: "active" | "suspended" | "deleted";

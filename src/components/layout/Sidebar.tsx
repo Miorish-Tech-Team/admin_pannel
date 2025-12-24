@@ -26,7 +26,16 @@ interface SidebarProps {
 const menuItems = [
   { name: "Dashboard", path: "/dashboard", icon: FiHome },
   { name: "User Management", path: "/dashboard/users", icon: FiUsers },
-  { name: "Seller Management", path: "/dashboard/sellers", icon: FiShoppingBag },
+  {
+    name: "Seller Management",
+    icon: FiShoppingBag,
+    submenu: [
+      { name: "Pending Approvals", path: "/dashboard/sellers/pending" },
+      { name: "All Sellers", path: "/dashboard/sellers/all" },
+      { name: "Seller Analytics", path: "/dashboard/sellers/analytics" },
+      { name: "Membership Plans", path: "/dashboard/sellers/membership" },
+    ],
+  },
   { name: "Order Management", path: "/dashboard/orders", icon: FiPackage },
   {
     name: "Product Management",
@@ -35,6 +44,8 @@ const menuItems = [
       { name: "Categories", path: "/dashboard/categories" },
       { name: "Subcategories", path: "/dashboard/subcategories" },
       { name: "Products", path: "/dashboard/products" },
+      { name: "Pending Products", path: "/dashboard/product-management" },
+      { name: "My Products", path: "/dashboard/all-products" },
     ],
   },
   {

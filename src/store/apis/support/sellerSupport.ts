@@ -7,7 +7,8 @@ export interface SellerTicket {
   description: string;
   status: "open" | "in_progress" | "closed" | "resolved";
   adminReply?: string;
-  imageUrl?: string;
+  messages?: TicketMessage[];
+  image?: string;
   createdAt: string;
   updatedAt?: string;
   Seller?: {
@@ -18,9 +19,17 @@ export interface SellerTicket {
   };
 }
 
+export interface TicketMessage {
+  sender: "seller" | "admin";
+  message: string;
+  timestamp: string;
+  isCrossQuestion?: boolean;
+}
+
 export interface ReplyToSellerTicketPayload {
-  adminReply: string;
+  reply: string;
   status?: "open" | "in_progress" | "closed" | "resolved";
+  isCrossQuestion?: boolean;
 }
 
 export interface ChangeSellerTicketStatusPayload {
@@ -29,7 +38,7 @@ export interface ChangeSellerTicketStatusPayload {
 
 export const sellerSupportApi = {
   // Get all seller tickets
-  getAllSellerTickets: async (): Promise<{ tickets: SellerTicket[] }> => {
+  getAllSellerTickets: async (): Promise<{ tickets: SellerTicket[]; count: number }> => {
     const response = await apiClient.get("/support/seller/admin/all-tickets");
     return response.data;
   },
@@ -51,7 +60,7 @@ export const sellerSupportApi = {
     ticketId: number,
     payload: ReplyToSellerTicketPayload
   ): Promise<{ message: string; ticket: SellerTicket }> => {
-    const response = await apiClient.put(`/support/seller/admin/reply/${ticketId}`, payload);
+    const response = await apiClient.post(`/support/seller/admin/reply/${ticketId}`, payload);
     return response.data;
   },
 

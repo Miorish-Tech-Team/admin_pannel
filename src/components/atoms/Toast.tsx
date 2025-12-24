@@ -115,7 +115,7 @@ const Toast: React.FC<ToastProps> = ({
 
   return (
     <div
-      className={`flex items-center gap-3 min-w-[300px] max-w-md p-4 mb-3 text-white rounded-lg shadow-lg border-l-4 ${getToastStyles()} animate-slideIn`}
+      className={`flex items-center gap-3 min-w-75 max-w-md p-4 mb-3 text-white rounded-lg shadow-lg border-l-4 ${getToastStyles()} animate-slideIn`}
       role="alert"
     >
       <div className="shrink-0">{getIcon()}</div>

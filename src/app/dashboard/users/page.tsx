@@ -413,7 +413,7 @@ export default function UsersPage() {
                     </td>
                     <td className="px-6 py-4">
                       <p className="text-sm font-poppins text-gray-600 capitalize">
-                        {user.authProvider}
+                        {user.role}
                       </p>
                     </td>
                     <td className="px-6 py-4">{getStatusBadge(user.status)}</td>

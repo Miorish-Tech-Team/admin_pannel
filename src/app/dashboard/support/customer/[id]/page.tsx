@@ -263,7 +263,7 @@ export default function TicketDetailPage() {
                     value={replyMessage}
                     onChange={(e) => setReplyMessage(e.target.value)}
                     placeholder="Type your reply here..."
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-poppins focus:outline-none focus:ring-1 min-h-[120px]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-poppins focus:outline-none focus:ring-1 min-h-30"
                     style={{ ["--tw-ring-color" as any]: colors.primeGold }}
                   />
                 </div>

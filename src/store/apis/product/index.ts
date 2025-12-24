@@ -123,8 +123,9 @@ export interface UpdateProductPayload {
 
 export const productApi = {
   // Get all products
-  getAllProducts: async (): Promise<Product[]> => {
-    const response = await apiClient.get("/admin/dashboard/products");
+  getAllProducts: async (page?: number, limit?: number): Promise<any> => {
+    const params = page && limit ? { page, limit } : {};
+    const response = await apiClient.get("/admin/dashboard/products", { params });
     return response.data;
   },
 
@@ -147,8 +148,9 @@ export const productApi = {
   },
 
   // Get products by status
-  getProductsByStatus: async (status: string): Promise<Product[]> => {
-    const response = await apiClient.get(`/admin/dashboard/products/status/${status}`);
+  getProductsByStatus: async (status: string, page?: number, limit?: number): Promise<any> => {
+    const params = page && limit ? { page, limit } : {};
+    const response = await apiClient.get(`/admin/dashboard/products/status/${status}`, { params });
     return response.data;
   },
 
