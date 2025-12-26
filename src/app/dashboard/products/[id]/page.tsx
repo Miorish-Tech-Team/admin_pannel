@@ -69,11 +69,13 @@ export default function ViewProductPage() {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-4">
-          <Link href="/dashboard/products">
-            <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
-              <FiArrowLeft size={24} style={{ color: colors.primeGreen }} />
-            </button>
-          </Link>
+         <button
+          onClick={() => router.back()}
+          className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          title="Go back"
+        >
+          <FiArrowLeft size={24} style={{ color: colors.primeGreen }} />
+        </button>
           <h1 className="text-3xl font-bold font-cinzel" style={{ color: colors.primeGreen }}>
             View Product
           </h1>
@@ -115,11 +117,13 @@ export default function ViewProductPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href="/dashboard/products">
-            <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
-              <FiArrowLeft size={24} style={{ color: colors.primeGreen }} />
-            </button>
-          </Link>
+          <button
+          onClick={() => router.back()}
+          className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          title="Go back"
+        >
+          <FiArrowLeft size={24} style={{ color: colors.primeGreen }} />
+        </button>
           <div>
             <h1 className="text-3xl font-bold font-cinzel" style={{ color: colors.primeGreen }}>
               Product Details

@@ -15,7 +15,7 @@ export const TableSkeleton: React.FC<{ rows?: number; columns?: number }> = ({
                   <div className="h-4 bg-gray-300 rounded w-3/4"></div>
                 </th>
               ))}
-            </tr>
+            </tr> 
           </thead>
           <tbody>
             {Array.from({ length: rows }).map((_, rowIndex) => (

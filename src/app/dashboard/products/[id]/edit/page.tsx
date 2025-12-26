@@ -4,7 +4,14 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button, Input, Textarea, Select } from "@/components/atoms";
 import { useToast } from "@/components/atoms";
-import { productApi, categoryApi, subcategoryApi, SubCategory, Product, Category } from "@/store/apis";
+import {
+  productApi,
+  categoryApi,
+  subcategoryApi,
+  SubCategory,
+  Product,
+  Category,
+} from "@/store/apis";
 import { colors as themeColors } from "@/utils/color";
 import { FiArrowLeft, FiUpload, FiX } from "react-icons/fi";
 import Link from "next/link";
@@ -16,13 +23,15 @@ export default function EditProductPage() {
   const router = useRouter();
   const toast = useToast();
   const productId = Number(params.id);
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<SubCategory[]>([]);
-  const [filteredSubcategories, setFilteredSubcategories] = useState<SubCategory[]>([]);
+  const [filteredSubcategories, setFilteredSubcategories] = useState<
+    SubCategory[]
+  >([]);
 
   const [formData, setFormData] = useState({
     productName: "",
@@ -96,11 +105,11 @@ export default function EditProductPage() {
         categoryApi.getAllCategories(),
         subcategoryApi.getAllSubCategories(),
       ]);
-      
+
       setProduct(productData);
       setCategories(categoriesRes.categories);
       setSubcategories(subcategoriesRes.subCategories || []);
-      
+
       // Populate form with existing data
       setFormData({
         productName: productData.productName || "",
@@ -108,10 +117,14 @@ export default function EditProductPage() {
         productBrand: productData.productBrand || "",
         productCode: productData.productCode || "",
         productPrice: productData.productPrice?.toString() || "",
-        productSubCategoryId: productData.productSubCategoryId?.toString() || "",
-        availableStockQuantity: productData.availableStockQuantity?.toString() || "",
-        productDiscountPercentage: productData.productDiscountPercentage?.toString() || "",
-        productDiscountPrice: productData.productDiscountPrice?.toString() || "",
+        productSubCategoryId:
+          productData.productSubCategoryId?.toString() || "",
+        availableStockQuantity:
+          productData.availableStockQuantity?.toString() || "",
+        productDiscountPercentage:
+          productData.productDiscountPercentage?.toString() || "",
+        productDiscountPrice:
+          productData.productDiscountPrice?.toString() || "",
         stockKeepingUnit: productData.stockKeepingUnit || "",
         productModelNumber: productData.productModelNumber || "",
         productBestSaleTag: productData.productBestSaleTag || "",
@@ -124,32 +137,43 @@ export default function EditProductPage() {
         productVideoUrl: productData.productVideoUrl || "",
         waxType: productData.waxType || "",
         singleOrCombo: productData.singleOrCombo || "Single",
-        distributorPurchasePrice: productData.distributorPurchasePrice?.toString() || "",
-        distributorSellingPrice: productData.distributorSellingPrice?.toString() || "",
-        retailerSellingPrice: productData.retailerSellingPrice?.toString() || "",
+        distributorPurchasePrice:
+          productData.distributorPurchasePrice?.toString() || "",
+        distributorSellingPrice:
+          productData.distributorSellingPrice?.toString() || "",
+        retailerSellingPrice:
+          productData.retailerSellingPrice?.toString() || "",
         mrpB2B: productData.mrpB2B?.toString() || "",
         mrpB2C: productData.mrpB2C?.toString() || "",
         status: productData.status || "pending",
       });
-      
+
       setTags(
-        typeof productData.productTags === 'string'
-          ? productData.productTags.split(',').map(t => t.trim()).filter(Boolean)
+        typeof productData.productTags === "string"
+          ? productData.productTags
+              .split(",")
+              .map((t) => t.trim())
+              .filter(Boolean)
           : productData.productTags || []
       );
       setSizes(
-        typeof productData.productSizes === 'string'
-          ? productData.productSizes.split(',').map(s => s.trim()).filter(Boolean)
+        typeof productData.productSizes === "string"
+          ? productData.productSizes
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean)
           : productData.productSizes || []
       );
       setColors(
-        typeof productData.productColors === 'string'
-          ? productData.productColors.split(',').map(c => c.trim()).filter(Boolean)
+        typeof productData.productColors === "string"
+          ? productData.productColors
+              .split(",")
+              .map((c) => c.trim())
+              .filter(Boolean)
           : productData.productColors || []
       );
       setSelectedCategoryId(productData.productCategoryId?.toString() || "");
       setExistingGalleryUrls(productData.galleryImageUrls || []);
-      
     } catch (error: any) {
       toast.error("Failed to fetch product data");
       router.push("/dashboard/products");
@@ -158,7 +182,11 @@ export default function EditProductPage() {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -170,31 +198,43 @@ export default function EditProductPage() {
     if (name === "coverImage") {
       setFiles((prev) => ({ ...prev, coverImage: selectedFiles[0] }));
     } else if (name === "galleryImages") {
-      const currentTotal = existingGalleryUrls.length + files.galleryImages.length;
+      const currentTotal =
+        existingGalleryUrls.length + files.galleryImages.length;
       const remainingSlots = 5 - currentTotal;
-      
+
       if (remainingSlots <= 0) {
-        toast.warning("Maximum 5 gallery images allowed. Remove some existing images first.");
+        toast.warning(
+          "Maximum 5 gallery images allowed. Remove some existing images first."
+        );
         return;
       }
-      
+
       const newFiles = Array.from(selectedFiles).slice(0, remainingSlots);
-      setFiles((prev) => ({ ...prev, galleryImages: [...prev.galleryImages, ...newFiles] }));
-      
+      setFiles((prev) => ({
+        ...prev,
+        galleryImages: [...prev.galleryImages, ...newFiles],
+      }));
+
       if (selectedFiles.length > remainingSlots) {
-        toast.info(`Only ${remainingSlots} image(s) added. Maximum is 5 total.`);
+        toast.info(
+          `Only ${remainingSlots} image(s) added. Maximum is 5 total.`
+        );
       }
     }
   };
 
   const handleRemoveExistingGalleryImage = (indexToRemove: number) => {
-    setExistingGalleryUrls((prev) => prev.filter((_, index) => index !== indexToRemove));
+    setExistingGalleryUrls((prev) =>
+      prev.filter((_, index) => index !== indexToRemove)
+    );
   };
 
   const handleRemoveNewGalleryImage = (indexToRemove: number) => {
     setFiles((prev) => ({
       ...prev,
-      galleryImages: prev.galleryImages.filter((_, index) => index !== indexToRemove)
+      galleryImages: prev.galleryImages.filter(
+        (_, index) => index !== indexToRemove
+      ),
     }));
   };
 
@@ -248,23 +288,45 @@ export default function EditProductPage() {
       };
 
       // Add optional fields
-      if (formData.productDiscountPercentage) payload.productDiscountPercentage = Number(formData.productDiscountPercentage);
-      if (formData.productDiscountPrice) payload.productDiscountPrice = Number(formData.productDiscountPrice);
-      if (formData.stockKeepingUnit) payload.stockKeepingUnit = formData.stockKeepingUnit;
-      if (formData.productModelNumber) payload.productModelNumber = formData.productModelNumber;
-      if (formData.productBestSaleTag) payload.productBestSaleTag = formData.productBestSaleTag;
-      if (formData.saleDayleft) payload.saleDayleft = Number(formData.saleDayleft);
-      if (formData.productWeight) payload.productWeight = formData.productWeight;
-      if (formData.productDimensions) payload.productDimensions = formData.productDimensions;
-      if (formData.productMaterial) payload.productMaterial = formData.productMaterial;
-      if (formData.productWarrantyInfo) payload.productWarrantyInfo = formData.productWarrantyInfo;
-      if (formData.productReturnPolicy) payload.productReturnPolicy = formData.productReturnPolicy;
-      if (formData.productVideoUrl) payload.productVideoUrl = formData.productVideoUrl;
+      if (formData.productDiscountPercentage)
+        payload.productDiscountPercentage = Number(
+          formData.productDiscountPercentage
+        );
+      if (formData.productDiscountPrice)
+        payload.productDiscountPrice = Number(formData.productDiscountPrice);
+      if (formData.stockKeepingUnit)
+        payload.stockKeepingUnit = formData.stockKeepingUnit;
+      if (formData.productModelNumber)
+        payload.productModelNumber = formData.productModelNumber;
+      if (formData.productBestSaleTag)
+        payload.productBestSaleTag = formData.productBestSaleTag;
+      if (formData.saleDayleft)
+        payload.saleDayleft = Number(formData.saleDayleft);
+      if (formData.productWeight)
+        payload.productWeight = formData.productWeight;
+      if (formData.productDimensions)
+        payload.productDimensions = formData.productDimensions;
+      if (formData.productMaterial)
+        payload.productMaterial = formData.productMaterial;
+      if (formData.productWarrantyInfo)
+        payload.productWarrantyInfo = formData.productWarrantyInfo;
+      if (formData.productReturnPolicy)
+        payload.productReturnPolicy = formData.productReturnPolicy;
+      if (formData.productVideoUrl)
+        payload.productVideoUrl = formData.productVideoUrl;
       if (formData.waxType) payload.waxType = formData.waxType;
-      if (formData.singleOrCombo) payload.singleOrCombo = formData.singleOrCombo;
-      if (formData.distributorPurchasePrice) payload.distributorPurchasePrice = Number(formData.distributorPurchasePrice);
-      if (formData.distributorSellingPrice) payload.distributorSellingPrice = Number(formData.distributorSellingPrice);
-      if (formData.retailerSellingPrice) payload.retailerSellingPrice = Number(formData.retailerSellingPrice);
+      if (formData.singleOrCombo)
+        payload.singleOrCombo = formData.singleOrCombo;
+      if (formData.distributorPurchasePrice)
+        payload.distributorPurchasePrice = Number(
+          formData.distributorPurchasePrice
+        );
+      if (formData.distributorSellingPrice)
+        payload.distributorSellingPrice = Number(
+          formData.distributorSellingPrice
+        );
+      if (formData.retailerSellingPrice)
+        payload.retailerSellingPrice = Number(formData.retailerSellingPrice);
       if (formData.mrpB2B) payload.mrpB2B = Number(formData.mrpB2B);
       if (formData.mrpB2C) payload.mrpB2C = Number(formData.mrpB2C);
 
@@ -285,7 +347,8 @@ export default function EditProductPage() {
       toast.success("Product updated successfully!");
       router.push(`/dashboard/products/${productId}`);
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || "Failed to update product";
+      const errorMessage =
+        error.response?.data?.message || "Failed to update product";
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -293,25 +356,30 @@ export default function EditProductPage() {
   };
 
   if (isLoading) {
-    return (
-     <EditProductSkeleton/>
-    );
+    return <EditProductSkeleton />;
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link href={`/dashboard/products/${productId}`}>
-          <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
-            <FiArrowLeft size={24} style={{ color: themeColors.primeGreen }} />
-          </button>
-        </Link>
+        <button
+          onClick={() => router.back()}
+          className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          title="Go back"
+        >
+          <FiArrowLeft size={24} style={{ color: themeColors.primeGreen }} />
+        </button>
         <div>
-          <h1 className="text-3xl font-bold font-cinzel" style={{ color: themeColors.primeGreen }}>
+          <h1
+            className="text-3xl font-bold font-cinzel"
+            style={{ color: themeColors.primeGreen }}
+          >
             Edit Product
           </h1>
-          <p className="mt-1 font-poppins text-gray-600">Update product information</p>
+          <p className="mt-1 font-poppins text-gray-600">
+            Update product information
+          </p>
         </div>
       </div>
 
@@ -319,10 +387,13 @@ export default function EditProductPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
         <div className="bg-white rounded-lg shadow-md p-6 space-y-4">
-          <h2 className="text-xl font-semibold font-cinzel" style={{ color: themeColors.primeGreen }}>
+          <h2
+            className="text-xl font-semibold font-cinzel"
+            style={{ color: themeColors.primeGreen }}
+          >
             Basic Information
           </h2>
-          
+
           <Input
             label="Product Name"
             name="productName"
@@ -331,7 +402,7 @@ export default function EditProductPage() {
             placeholder="Enter product name"
             required
           />
-          
+
           <Textarea
             label="Product Description"
             name="productDescription"
@@ -341,7 +412,7 @@ export default function EditProductPage() {
             rows={4}
             required
           />
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Input
               label="Brand"
@@ -351,7 +422,7 @@ export default function EditProductPage() {
               placeholder="Brand name"
               required
             />
-            
+
             <Input
               label="Product Code"
               name="productCode"
@@ -360,7 +431,7 @@ export default function EditProductPage() {
               placeholder="e.g., SKU-001"
               required
             />
-            
+
             <Input
               label="SKU"
               name="stockKeepingUnit"
@@ -378,7 +449,7 @@ export default function EditProductPage() {
               onChange={handleChange}
               placeholder="Product model"
             />
-            
+
             <Input
               label="Best Sale Tag"
               name="productBestSaleTag"
@@ -391,10 +462,13 @@ export default function EditProductPage() {
 
         {/* Category */}
         <div className="bg-white rounded-lg shadow-md p-6 space-y-4">
-          <h2 className="text-xl font-semibold font-cinzel" style={{ color: themeColors.primeGreen }}>
+          <h2
+            className="text-xl font-semibold font-cinzel"
+            style={{ color: themeColors.primeGreen }}
+          >
             Category & Subcategory
           </h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Select
               label="Category"
@@ -405,11 +479,14 @@ export default function EditProductPage() {
               }}
               options={[
                 { value: "", label: "Select Category" },
-                ...categories.map((c) => ({ value: c.id.toString(), label: c.categoryName })),
+                ...categories.map((c) => ({
+                  value: c.id.toString(),
+                  label: c.categoryName,
+                })),
               ]}
               required
             />
-            
+
             <Select
               label="Subcategory"
               name="productSubCategoryId"
@@ -417,7 +494,10 @@ export default function EditProductPage() {
               onChange={handleChange}
               options={[
                 { value: "", label: "Select Subcategory" },
-                ...filteredSubcategories.map((s) => ({ value: s.id.toString(), label: s.subCategoryName })),
+                ...filteredSubcategories.map((s) => ({
+                  value: s.id.toString(),
+                  label: s.subCategoryName,
+                })),
               ]}
               required
               disabled={!selectedCategoryId}
@@ -425,94 +505,133 @@ export default function EditProductPage() {
           </div>
 
           {/* Category Details */}
-          {selectedCategoryId && categories.find(c => c.id === Number(selectedCategoryId)) && (
-            <div className="mt-6 pt-6 border-t border-gray-200">
-              <h3 className="text-lg font-semibold font-cinzel mb-4" style={{ color: themeColors.primeGreen }}>
-                Selected Category Details
-              </h3>
-              {(() => {
-                const selectedCat = categories.find(c => c.id === Number(selectedCategoryId));
-                return selectedCat ? (
-                  <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                    <p className="font-poppins text-sm" style={{ color: themeColors.darkgray }}>
-                      <span className="font-semibold">Category:</span> {selectedCat.categoryName}
-                    </p>
-                    {selectedCat.categoryDescription && (
-                      <p className="font-poppins text-sm" style={{ color: themeColors.darkgray }}>
-                        <span className="font-semibold">Description:</span> {selectedCat.categoryDescription}
+          {selectedCategoryId &&
+            categories.find((c) => c.id === Number(selectedCategoryId)) && (
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <h3
+                  className="text-lg font-semibold font-cinzel mb-4"
+                  style={{ color: themeColors.primeGreen }}
+                >
+                  Selected Category Details
+                </h3>
+                {(() => {
+                  const selectedCat = categories.find(
+                    (c) => c.id === Number(selectedCategoryId)
+                  );
+                  return selectedCat ? (
+                    <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                      <p
+                        className="font-poppins text-sm"
+                        style={{ color: themeColors.darkgray }}
+                      >
+                        <span className="font-semibold">Category:</span>{" "}
+                        {selectedCat.categoryName}
                       </p>
-                    )}
-                    {selectedCat.categoryImage && (
-                      <div className="mt-3">
-                        <p className="font-poppins text-sm font-semibold mb-2" style={{ color: themeColors.darkgray }}>
-                          Image:
+                      {selectedCat.categoryDescription && (
+                        <p
+                          className="font-poppins text-sm"
+                          style={{ color: themeColors.darkgray }}
+                        >
+                          <span className="font-semibold">Description:</span>{" "}
+                          {selectedCat.categoryDescription}
                         </p>
-                        <div className="relative w-32 h-32 rounded-lg overflow-hidden border-2 border-gray-200">
-                          <Image 
-                            src={selectedCat.categoryImage} 
-                            alt={selectedCat.categoryName}
-                            fill
-                            sizes="128px"
-                            className="object-cover"
-                            unoptimized
-                          />
+                      )}
+                      {selectedCat.categoryImage && (
+                        <div className="mt-3">
+                          <p
+                            className="font-poppins text-sm font-semibold mb-2"
+                            style={{ color: themeColors.darkgray }}
+                          >
+                            Image:
+                          </p>
+                          <div className="relative w-32 h-32 rounded-lg overflow-hidden border-2 border-gray-200">
+                            <Image
+                              src={selectedCat.categoryImage}
+                              alt={selectedCat.categoryName}
+                              fill
+                              sizes="128px"
+                              className="object-cover"
+                              unoptimized
+                            />
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                ) : null;
-              })()}
-            </div>
-          )}
+                      )}
+                    </div>
+                  ) : null;
+                })()}
+              </div>
+            )}
 
           {/* Subcategory Details */}
-          {formData.productSubCategoryId && filteredSubcategories.find(s => s.id === Number(formData.productSubCategoryId)) && (
-            <div className="mt-4">
-              <h3 className="text-lg font-semibold font-cinzel mb-4" style={{ color: themeColors.primeGreen }}>
-                Selected Subcategory Details
-              </h3>
-              {(() => {
-                const selectedSub = filteredSubcategories.find(s => s.id === Number(formData.productSubCategoryId));
-                return selectedSub ? (
-                  <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                    <p className="font-poppins text-sm" style={{ color: themeColors.darkgray }}>
-                      <span className="font-semibold">Subcategory:</span> {selectedSub.subCategoryName}
-                    </p>
-                    {selectedSub.subCategoryDescription && (
-                      <p className="font-poppins text-sm" style={{ color: themeColors.darkgray }}>
-                        <span className="font-semibold">Description:</span> {selectedSub.subCategoryDescription}
+          {formData.productSubCategoryId &&
+            filteredSubcategories.find(
+              (s) => s.id === Number(formData.productSubCategoryId)
+            ) && (
+              <div className="mt-4">
+                <h3
+                  className="text-lg font-semibold font-cinzel mb-4"
+                  style={{ color: themeColors.primeGreen }}
+                >
+                  Selected Subcategory Details
+                </h3>
+                {(() => {
+                  const selectedSub = filteredSubcategories.find(
+                    (s) => s.id === Number(formData.productSubCategoryId)
+                  );
+                  return selectedSub ? (
+                    <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                      <p
+                        className="font-poppins text-sm"
+                        style={{ color: themeColors.darkgray }}
+                      >
+                        <span className="font-semibold">Subcategory:</span>{" "}
+                        {selectedSub.subCategoryName}
                       </p>
-                    )}
-                    {selectedSub.subCategoryImage && (
-                      <div className="mt-3">
-                        <p className="font-poppins text-sm font-semibold mb-2" style={{ color: themeColors.darkgray }}>
-                          Image:
+                      {selectedSub.subCategoryDescription && (
+                        <p
+                          className="font-poppins text-sm"
+                          style={{ color: themeColors.darkgray }}
+                        >
+                          <span className="font-semibold">Description:</span>{" "}
+                          {selectedSub.subCategoryDescription}
                         </p>
-                        <div className="relative w-32 h-32 rounded-lg overflow-hidden border-2 border-gray-200">
-                          <Image 
-                            src={selectedSub.subCategoryImage} 
-                            alt={selectedSub.subCategoryName}
-                            fill
-                            sizes="128px"
-                            className="object-cover"
-                            unoptimized
-                          />
+                      )}
+                      {selectedSub.subCategoryImage && (
+                        <div className="mt-3">
+                          <p
+                            className="font-poppins text-sm font-semibold mb-2"
+                            style={{ color: themeColors.darkgray }}
+                          >
+                            Image:
+                          </p>
+                          <div className="relative w-32 h-32 rounded-lg overflow-hidden border-2 border-gray-200">
+                            <Image
+                              src={selectedSub.subCategoryImage}
+                              alt={selectedSub.subCategoryName}
+                              fill
+                              sizes="128px"
+                              className="object-cover"
+                              unoptimized
+                            />
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                ) : null;
-              })()}
-            </div>
-          )}
+                      )}
+                    </div>
+                  ) : null;
+                })()}
+              </div>
+            )}
         </div>
 
         {/* Status */}
         <div className="bg-white rounded-lg shadow-md p-6 space-y-4">
-          <h2 className="text-xl font-semibold font-cinzel" style={{ color: themeColors.primeGreen }}>
+          <h2
+            className="text-xl font-semibold font-cinzel"
+            style={{ color: themeColors.primeGreen }}
+          >
             Product Status
           </h2>
-          
+
           <Select
             label="Status"
             name="status"
@@ -529,10 +648,13 @@ export default function EditProductPage() {
 
         {/* Pricing */}
         <div className="bg-white rounded-lg shadow-md p-6 space-y-4">
-          <h2 className="text-xl font-semibold font-cinzel" style={{ color: themeColors.primeGreen }}>
+          <h2
+            className="text-xl font-semibold font-cinzel"
+            style={{ color: themeColors.primeGreen }}
+          >
             Pricing
           </h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Input
               label="Product Price"
@@ -544,7 +666,7 @@ export default function EditProductPage() {
               placeholder="0.00"
               required
             />
-            
+
             <Input
               label="Discount Percentage"
               name="productDiscountPercentage"
@@ -554,7 +676,7 @@ export default function EditProductPage() {
               onChange={handleChange}
               placeholder="0"
             />
-            
+
             <Input
               label="Discount Price"
               name="productDiscountPrice"
@@ -564,7 +686,7 @@ export default function EditProductPage() {
               onChange={handleChange}
               placeholder="0.00"
             />
-            
+
             <Input
               label="Distributor Purchase Price"
               name="distributorPurchasePrice"
@@ -574,7 +696,7 @@ export default function EditProductPage() {
               onChange={handleChange}
               placeholder="0.00"
             />
-            
+
             <Input
               label="Distributor Selling Price"
               name="distributorSellingPrice"
@@ -584,7 +706,7 @@ export default function EditProductPage() {
               onChange={handleChange}
               placeholder="0.00"
             />
-            
+
             <Input
               label="Retailer Selling Price"
               name="retailerSellingPrice"
@@ -594,7 +716,7 @@ export default function EditProductPage() {
               onChange={handleChange}
               placeholder="0.00"
             />
-            
+
             <Input
               label="MRP B2B"
               name="mrpB2B"
@@ -604,7 +726,7 @@ export default function EditProductPage() {
               onChange={handleChange}
               placeholder="0.00"
             />
-            
+
             <Input
               label="MRP B2C"
               name="mrpB2C"
@@ -614,7 +736,7 @@ export default function EditProductPage() {
               onChange={handleChange}
               placeholder="0.00"
             />
-            
+
             <Input
               label="Sale Days Left"
               name="saleDayleft"
@@ -628,10 +750,13 @@ export default function EditProductPage() {
 
         {/* Inventory */}
         <div className="bg-white rounded-lg shadow-md p-6 space-y-4">
-          <h2 className="text-xl font-semibold font-cinzel" style={{ color: themeColors.primeGreen }}>
+          <h2
+            className="text-xl font-semibold font-cinzel"
+            style={{ color: themeColors.primeGreen }}
+          >
             Inventory
           </h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
               label="Available Stock Quantity"
@@ -647,10 +772,13 @@ export default function EditProductPage() {
 
         {/* Product Details */}
         <div className="bg-white rounded-lg shadow-md p-6 space-y-4">
-          <h2 className="text-xl font-semibold font-cinzel" style={{ color: themeColors.primeGreen }}>
+          <h2
+            className="text-xl font-semibold font-cinzel"
+            style={{ color: themeColors.primeGreen }}
+          >
             Product Details
           </h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
               label="Weight"
@@ -659,7 +787,7 @@ export default function EditProductPage() {
               onChange={handleChange}
               placeholder="e.g., 500g"
             />
-            
+
             <Input
               label="Dimensions"
               name="productDimensions"
@@ -667,7 +795,7 @@ export default function EditProductPage() {
               onChange={handleChange}
               placeholder="e.g., 10x10x10 cm"
             />
-            
+
             <Input
               label="Material"
               name="productMaterial"
@@ -675,7 +803,7 @@ export default function EditProductPage() {
               onChange={handleChange}
               placeholder="e.g., Cotton, Wax"
             />
-            
+
             <Input
               label="Wax Type"
               name="waxType"
@@ -683,7 +811,7 @@ export default function EditProductPage() {
               onChange={handleChange}
               placeholder="e.g., Soy Wax"
             />
-            
+
             <Select
               label="Single or Combo"
               name="singleOrCombo"
@@ -695,7 +823,7 @@ export default function EditProductPage() {
               ]}
             />
           </div>
-          
+
           <Input
             label="Warranty Info"
             name="productWarrantyInfo"
@@ -703,7 +831,7 @@ export default function EditProductPage() {
             onChange={handleChange}
             placeholder="Enter warranty information"
           />
-          
+
           <Input
             label="Return Policy"
             name="productReturnPolicy"
@@ -715,23 +843,36 @@ export default function EditProductPage() {
 
         {/* Tags, Sizes, Colors */}
         <div className="bg-white rounded-lg shadow-md p-6 space-y-4">
-          <h2 className="text-xl font-semibold font-cinzel" style={{ color: themeColors.primeGreen }}>
+          <h2
+            className="text-xl font-semibold font-cinzel"
+            style={{ color: themeColors.primeGreen }}
+          >
             Tags, Sizes & Colors
           </h2>
-          
+
           {/* Tags */}
           <div>
-            <label className="block text-sm font-medium font-poppins mb-2" style={{ color: themeColors.darkgray }}>
+            <label
+              className="block text-sm font-medium font-poppins mb-2"
+              style={{ color: themeColors.darkgray }}
+            >
               Product Tags
             </label>
             <div className="flex gap-2 mb-2">
               <Input
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), handleAddTag())}
+                onKeyPress={(e) =>
+                  e.key === "Enter" && (e.preventDefault(), handleAddTag())
+                }
                 placeholder="Enter tag and press Enter"
               />
-              <Button type="button" variant="secondary" size="md" onClick={handleAddTag}>
+              <Button
+                type="button"
+                variant="secondary"
+                size="md"
+                onClick={handleAddTag}
+              >
                 Add
               </Button>
             </div>
@@ -740,10 +881,17 @@ export default function EditProductPage() {
                 <span
                   key={tag}
                   className="px-3 py-1 rounded-full text-sm font-poppins flex items-center gap-2"
-                  style={{ backgroundColor: `${themeColors.primeGold}20`, color: themeColors.primeGold }}
+                  style={{
+                    backgroundColor: `${themeColors.primeGold}20`,
+                    color: themeColors.primeGold,
+                  }}
                 >
                   {tag}
-                  <button type="button" onClick={() => handleRemoveTag(tag)} className="hover:opacity-70">
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveTag(tag)}
+                    className="hover:opacity-70"
+                  >
                     ×
                   </button>
                 </span>
@@ -753,17 +901,27 @@ export default function EditProductPage() {
 
           {/* Sizes */}
           <div>
-            <label className="block text-sm font-medium font-poppins mb-2" style={{ color: themeColors.darkgray }}>
+            <label
+              className="block text-sm font-medium font-poppins mb-2"
+              style={{ color: themeColors.darkgray }}
+            >
               Available Sizes
             </label>
             <div className="flex gap-2 mb-2">
               <Input
                 value={sizeInput}
                 onChange={(e) => setSizeInput(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), handleAddSize())}
+                onKeyPress={(e) =>
+                  e.key === "Enter" && (e.preventDefault(), handleAddSize())
+                }
                 placeholder="Enter size and press Enter"
               />
-              <Button type="button" variant="secondary" size="md" onClick={handleAddSize}>
+              <Button
+                type="button"
+                variant="secondary"
+                size="md"
+                onClick={handleAddSize}
+              >
                 Add
               </Button>
             </div>
@@ -772,10 +930,17 @@ export default function EditProductPage() {
                 <span
                   key={size}
                   className="px-3 py-1 rounded-full text-sm font-poppins flex items-center gap-2"
-                  style={{ backgroundColor: `${themeColors.primeGreen}20`, color: themeColors.primeGreen }}
+                  style={{
+                    backgroundColor: `${themeColors.primeGreen}20`,
+                    color: themeColors.primeGreen,
+                  }}
                 >
                   {size}
-                  <button type="button" onClick={() => handleRemoveSize(size)} className="hover:opacity-70">
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveSize(size)}
+                    className="hover:opacity-70"
+                  >
                     ×
                   </button>
                 </span>
@@ -785,17 +950,27 @@ export default function EditProductPage() {
 
           {/* Colors */}
           <div>
-            <label className="block text-sm font-medium font-poppins mb-2" style={{ color: themeColors.darkgray }}>
+            <label
+              className="block text-sm font-medium font-poppins mb-2"
+              style={{ color: themeColors.darkgray }}
+            >
               Available Colors
             </label>
             <div className="flex gap-2 mb-2">
               <Input
                 value={colorInput}
                 onChange={(e) => setColorInput(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), handleAddColor())}
+                onKeyPress={(e) =>
+                  e.key === "Enter" && (e.preventDefault(), handleAddColor())
+                }
                 placeholder="Enter color and press Enter"
               />
-              <Button type="button" variant="secondary" size="md" onClick={handleAddColor}>
+              <Button
+                type="button"
+                variant="secondary"
+                size="md"
+                onClick={handleAddColor}
+              >
                 Add
               </Button>
             </div>
@@ -804,10 +979,17 @@ export default function EditProductPage() {
                 <span
                   key={color}
                   className="px-3 py-1 rounded-full text-sm font-poppins flex items-center gap-2"
-                  style={{ backgroundColor: `${themeColors.secondaryGreen}20`, color: themeColors.secondaryGreen }}
+                  style={{
+                    backgroundColor: `${themeColors.secondaryGreen}20`,
+                    color: themeColors.secondaryGreen,
+                  }}
                 >
                   {color}
-                  <button type="button" onClick={() => handleRemoveColor(color)} className="hover:opacity-70">
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveColor(color)}
+                    className="hover:opacity-70"
+                  >
                     ×
                   </button>
                 </span>
@@ -818,18 +1000,31 @@ export default function EditProductPage() {
 
         {/* Images */}
         <div className="bg-white rounded-lg shadow-md p-6 space-y-4">
-          <h2 className="text-xl font-semibold font-cinzel" style={{ color: themeColors.primeGreen }}>
+          <h2
+            className="text-xl font-semibold font-cinzel"
+            style={{ color: themeColors.primeGreen }}
+          >
             Images & Media
           </h2>
-          
+
           {/* Current Cover Image (Display Only) */}
           {product?.coverImageUrl && (
             <div>
-              <label className="block text-sm font-medium font-poppins mb-2" style={{ color: themeColors.darkgray }}>
+              <label
+                className="block text-sm font-medium font-poppins mb-2"
+                style={{ color: themeColors.darkgray }}
+              >
                 Cover Image (Cannot be changed)
               </label>
               <div className="relative w-48 h-48 rounded-lg overflow-hidden border-2 border-gray-200">
-                <Image src={product.coverImageUrl} alt="Cover image" fill sizes="192px" className="object-cover"  unoptimized />
+                <Image
+                  src={product.coverImageUrl}
+                  alt="Cover image"
+                  fill
+                  sizes="192px"
+                  className="object-cover"
+                  unoptimized
+                />
               </div>
               <p className="text-sm text-gray-500 mt-2 font-poppins">
                 Cover image can only be set during product creation
@@ -839,22 +1034,30 @@ export default function EditProductPage() {
 
           {/* Gallery Images */}
           <div>
-            <label className="block text-sm font-medium font-poppins mb-2" style={{ color: themeColors.darkgray }}>
-              Gallery Images ({existingGalleryUrls.length + files.galleryImages.length}/5)
+            <label
+              className="block text-sm font-medium font-poppins mb-2"
+              style={{ color: themeColors.darkgray }}
+            >
+              Gallery Images (
+              {existingGalleryUrls.length + files.galleryImages.length}/5)
             </label>
-            
+
             {/* Display All Images: Existing + New */}
-            {(existingGalleryUrls.length > 0 || files.galleryImages.length > 0) && (
+            {(existingGalleryUrls.length > 0 ||
+              files.galleryImages.length > 0) && (
               <div className="mb-4">
                 <div className="grid grid-cols-5 gap-2 mb-3">
                   {/* Existing Gallery Images */}
                   {existingGalleryUrls.map((url, index) => (
-                    <div key={`existing-${index}`} className="relative aspect-square rounded-lg overflow-hidden border-2 border-blue-500">
-                      <Image 
-                        src={url} 
-                        alt={`Existing ${index + 1}`} 
-                        fill 
-                        sizes="100px" 
+                    <div
+                      key={`existing-${index}`}
+                      className="relative aspect-square rounded-lg overflow-hidden border-2 border-blue-500"
+                    >
+                      <Image
+                        src={url}
+                        alt={`Existing ${index + 1}`}
+                        fill
+                        sizes="100px"
                         className="object-cover"
                         unoptimized
                       />
@@ -871,15 +1074,18 @@ export default function EditProductPage() {
                       </div>
                     </div>
                   ))}
-                  
+
                   {/* New Gallery Images */}
                   {files.galleryImages.map((file, index) => (
-                    <div key={`new-${index}`} className="relative aspect-square rounded-lg overflow-hidden border-2 border-green-500">
-                      <Image 
-                        src={URL.createObjectURL(file)} 
-                        alt={`New ${index + 1}`} 
-                        fill 
-                        sizes="100px" 
+                    <div
+                      key={`new-${index}`}
+                      className="relative aspect-square rounded-lg overflow-hidden border-2 border-green-500"
+                    >
+                      <Image
+                        src={URL.createObjectURL(file)}
+                        alt={`New ${index + 1}`}
+                        fill
+                        sizes="100px"
                         className="object-cover"
                         unoptimized
                       />
@@ -898,13 +1104,15 @@ export default function EditProductPage() {
                   ))}
                 </div>
                 <p className="text-sm font-poppins text-gray-600">
-                  <span className="text-blue-600">Blue border</span> = Existing images, <span className="text-green-600">Green border</span> = New images to upload
+                  <span className="text-blue-600">Blue border</span> = Existing
+                  images, <span className="text-green-600">Green border</span> =
+                  New images to upload
                 </p>
               </div>
             )}
 
             {/* Upload More Button */}
-            {(existingGalleryUrls.length + files.galleryImages.length) < 5 && (
+            {existingGalleryUrls.length + files.galleryImages.length < 5 && (
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                 <input
                   type="file"
@@ -919,9 +1127,19 @@ export default function EditProductPage() {
                   htmlFor="galleryImages"
                   className="cursor-pointer flex flex-col items-center gap-2"
                 >
-                  <FiUpload size={32} style={{ color: themeColors.primeGold }} />
-                  <span className="font-poppins" style={{ color: themeColors.darkgray }}>
-                    Add more images ({5 - existingGalleryUrls.length - files.galleryImages.length} slots remaining)
+                  <FiUpload
+                    size={32}
+                    style={{ color: themeColors.primeGold }}
+                  />
+                  <span
+                    className="font-poppins"
+                    style={{ color: themeColors.darkgray }}
+                  >
+                    Add more images (
+                    {5 -
+                      existingGalleryUrls.length -
+                      files.galleryImages.length}{" "}
+                    slots remaining)
                   </span>
                   <span className="text-xs text-gray-500 font-poppins">
                     You can select multiple images at once
@@ -929,17 +1147,16 @@ export default function EditProductPage() {
                 </label>
               </div>
             )}
-            
-            {(existingGalleryUrls.length + files.galleryImages.length) >= 5 && (
+
+            {existingGalleryUrls.length + files.galleryImages.length >= 5 && (
               <div className="p-4 bg-gray-100 rounded-lg text-center">
                 <p className="text-sm font-poppins text-gray-600">
-                  Maximum of 5 gallery images reached. Remove some images to add new ones.
+                  Maximum of 5 gallery images reached. Remove some images to add
+                  new ones.
                 </p>
               </div>
             )}
           </div>
-
-          
         </div>
 
         {/* Submit Buttons */}
@@ -949,7 +1166,12 @@ export default function EditProductPage() {
               Cancel
             </Button>
           </Link>
-          <Button type="submit" variant="primary" size="md" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? "Updating..." : "Update Product"}
           </Button>
         </div>

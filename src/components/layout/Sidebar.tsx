@@ -45,7 +45,7 @@ const menuItems = [
       { name: "Subcategories", path: "/dashboard/subcategories" },
       { name: "Products", path: "/dashboard/products" },
       { name: "Pending Products", path: "/dashboard/product-management" },
-      { name: "My Products", path: "/dashboard/all-products" },
+      { name: "My Products", path: "/dashboard/my-products" },
     ],
   },
   {

@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, useToast } from "@/components/atoms";
-import { TableSkeleton } from "@/components/skeletons";
 import { sellerSupportApi, SellerTicket } from "@/store/apis";
 import { colors } from "@/utils/color";
 import { FiFilter, FiEye, FiMessageCircle, FiX, FiClock, FiCheckCircle, FiAlertCircle } from "react-icons/fi";
+import SupportTicketsSkeleton from "@/components/skeletons/SupportTicketsSkeleton";
 
 export default function SellerSupportPage() {
   const router = useRouter();
@@ -262,13 +262,7 @@ export default function SellerSupportPage() {
       {/* Tickets Table */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         {isLoading ? (
-          <div className="p-8 text-center">
-            <div
-              className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent"
-              style={{ color: colors.primeGreen }}
-            />
-            <p className="mt-4 font-poppins">Loading tickets...</p>
-          </div>
+          <SupportTicketsSkeleton/>
         ) : error ? (
           <div className="p-8 text-center">
             <p className="font-poppins" style={{ color: colors.primeRed }}>

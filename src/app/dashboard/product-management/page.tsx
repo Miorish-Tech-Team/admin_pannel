@@ -20,6 +20,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import Image from "next/image";
+import PendingProductsSkeleton from "@/components/skeletons/PendingProductsSkeleton";
 
 export default function ProductManagementPage() {
   const toast = useToast();
@@ -172,12 +173,7 @@ export default function ProductManagementPage() {
 
         <div className="p-6">
           {isLoading ? (
-            <div className="flex items-center justify-center py-16">
-              <div
-                className="animate-spin rounded-full h-12 w-12 border-4 border-t-transparent"
-                style={{ borderColor: colors.primeGreen }}
-              ></div>
-            </div>
+            <PendingProductsSkeleton />
           ) : pendingProducts.length === 0 ? (
             <div className="text-center py-12">
               <FiClock
