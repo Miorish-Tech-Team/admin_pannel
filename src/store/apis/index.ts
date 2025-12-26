@@ -8,6 +8,7 @@ export { userManagementApi } from "./user/userManagement";
 export { dashboardApi } from "./dashboard/dashboardApi";
 export { sellerApi } from "./seller/sellerApi";
 export { membershipApi } from "./membership/membershipApi";
+export { orderApi } from "./order/orderApi";
 
 export type { SignInPayload, SignInResponse, LogoutResponse } from "./auth";
 export type { Category, SubCategory, CreateCategoryPayload, UpdateCategoryPayload } from "./category";
@@ -19,4 +20,5 @@ export type { User, Order as UserOrder, Review as UserReview, Address as UserAdd
 export type { DashboardStats } from "./dashboard/dashboardApi";
 export type { PendingSeller, ApiResponse } from "./seller/sellerApi";
 export type { Membership, MembershipFormData } from "./membership/membershipApi";
+export type { Order, OrderItem, GetOrdersResponse } from "./order/orderApi";
 
