@@ -16,6 +16,8 @@ import {
   FiMenu,
   FiX,
 } from "react-icons/fi";
+import { GiKnightBanner } from "react-icons/gi";
+import { FaBlog } from "react-icons/fa";
 import { authApi } from "@/store/apis";
 
 interface SidebarProps {
@@ -48,6 +50,8 @@ const menuItems = [
       { name: "My Products", path: "/dashboard/my-products" },
     ],
   },
+  { name: "Handle Banners", path: "/dashboard/banners", icon: GiKnightBanner },
+  { name: "Blog Management", path: "/dashboard/blogs", icon: FaBlog },
   {
     name: "Support Management",
     icon: FiHelpCircle,

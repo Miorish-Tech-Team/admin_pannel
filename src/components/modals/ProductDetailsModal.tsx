@@ -88,7 +88,7 @@ export default function ProductDetailsModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/50 bg-opacity-30 p-4"
       onClick={onClose}
     >
       <div
