@@ -163,7 +163,8 @@ export const productApi = {
         if (key === "galleryImageUrls" && Array.isArray(value)) {
           value.forEach((file) => formData.append("galleryImageUrls", file));
         } else if (Array.isArray(value)) {
-          formData.append(key, JSON.stringify(value));
+          // Convert arrays to comma-separated strings for productTags, productSizes, productColors
+          formData.append(key, value.join(','));
         } else if (value instanceof File) {
           formData.append(key, value);
         } else {
@@ -186,8 +187,9 @@ export const productApi = {
       if (value !== undefined && value !== null) {
         if (key === "galleryImageUrls" && Array.isArray(value)) {
           value.forEach((file) => formData.append("galleryImageUrls", file));
-        } else if (Array.isArray(value)) {
-          formData.append(key, JSON.stringify(value));
+        } else if (key === "existingGalleryUrls" && typeof value === 'string') {
+          // Keep existingGalleryUrls as stringified JSON
+          formData.append(key, value);
         } else if (value instanceof File) {
           formData.append(key, value);
         } else {

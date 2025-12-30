@@ -331,9 +331,9 @@ export default function EditProductPage() {
       if (formData.mrpB2C) payload.mrpB2C = Number(formData.mrpB2C);
 
       // Add arrays
-      if (tags.length > 0) payload.productTags = tags;
-      if (sizes.length > 0) payload.productSizes = sizes;
-      if (colors.length > 0) payload.productColors = colors;
+      if (tags.length > 0) payload.productTags = tags.join(",");
+      if (sizes.length > 0) payload.productSizes = sizes.join(",");
+      if (colors.length > 0) payload.productColors = colors.join(",");
 
       // Add existing gallery URLs (as JSON string) and new files
       if (existingGalleryUrls.length > 0) {

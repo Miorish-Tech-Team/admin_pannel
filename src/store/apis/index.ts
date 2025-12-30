@@ -9,6 +9,7 @@ export { dashboardApi } from "./dashboard/dashboardApi";
 export { sellerApi } from "./seller/sellerApi";
 export { membershipApi } from "./membership/membershipApi";
 export { orderApi } from "./order/orderApi";
+export { warehouseApi } from "./warehouse/warehouseApi";
 
 export type { SignInPayload, SignInResponse, LogoutResponse } from "./auth";
 export type { Category, SubCategory, CreateCategoryPayload, UpdateCategoryPayload } from "./category";
@@ -21,4 +22,5 @@ export type { DashboardStats } from "./dashboard/dashboardApi";
 export type { PendingSeller, ApiResponse } from "./seller/sellerApi";
 export type { Membership, MembershipFormData } from "./membership/membershipApi";
 export type { Order, OrderItem, GetOrdersResponse } from "./order/orderApi";
+export type { Warehouse, CreateWarehousePayload, UpdateWarehousePayload } from "./warehouse/warehouseApi";
 

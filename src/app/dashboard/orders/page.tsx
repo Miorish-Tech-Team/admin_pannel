@@ -600,7 +600,7 @@ export default function OrdersPage() {
                   </h3>
                 </div>
                 <div className="space-y-3">
-                  {selectedOrder.OrderItems?.map((item: any, index: number) => (
+                  {selectedOrder.orderItems?.map((item: any, index: number) => (
                     <div
                       key={index}
                       className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"

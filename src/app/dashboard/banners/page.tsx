@@ -29,9 +29,9 @@ type Banner =
 
 const BANNER_LIMITS = {
   homepage: 3,
-  weekly: 4,
+  weekly: 1,
   popular: 1,
-  brand: 5,
+  brand: 4,
 };
 
 const BannerManagement = () => {

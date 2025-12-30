@@ -15,6 +15,7 @@ import {
   FiLogOut,
   FiMenu,
   FiX,
+  FiMapPin,
 } from "react-icons/fi";
 import { GiKnightBanner } from "react-icons/gi";
 import { FaBlog } from "react-icons/fa";
@@ -52,6 +53,7 @@ const menuItems = [
   },
   { name: "Handle Banners", path: "/dashboard/banners", icon: GiKnightBanner },
   { name: "Blog Management", path: "/dashboard/blogs", icon: FaBlog },
+  { name: "Warehouse Management", path: "/dashboard/warehouses", icon: FiMapPin },
   {
     name: "Support Management",
     icon: FiHelpCircle,
