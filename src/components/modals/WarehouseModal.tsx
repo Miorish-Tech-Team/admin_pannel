@@ -296,28 +296,6 @@ export default function WarehouseModal({
               )}
             </div>
 
-            {/* Latitude */}
-            <Input
-              label="Latitude (Optional)"
-              name="latitude"
-              type="number"
-              step="0.0000001"
-              value={formData.latitude || ""}
-              onChange={handleChange}
-              placeholder="e.g., 19.0760"
-            />
-
-            {/* Longitude */}
-            <Input
-              label="Longitude (Optional)"
-              name="longitude"
-              type="number"
-              step="0.0000001"
-              value={formData.longitude || ""}
-              onChange={handleChange}
-              placeholder="e.g., 72.8777"
-            />
-
             {/* Is Primary */}
             <div className="md:col-span-2 flex items-center gap-3 p-4 rounded-lg" style={{ backgroundColor: colors.offYellow }}>
               <input
