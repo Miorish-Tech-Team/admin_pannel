@@ -1,5 +1,5 @@
 export const colors = {
-  base: "#FBF9F3",
+  base: "#  ",
   primeGreen: "#08341D",
   primeGold: "#B8994B",
   darkgray: "#333333",
