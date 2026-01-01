@@ -155,3 +155,69 @@ export const addProductPosterAdsBanner = async (formData: FormData): Promise<Pro
 export const deleteProductPosterAdsBanner = async (id: number): Promise<void> => {
   await apiClient.delete(`/advertisement/products-banners/${id}`);
 };
+
+// Update Banner APIs
+export const updateHomepageBanner = async (id: number, formData: FormData): Promise<HomepageBanner> => {
+  const response = await apiClient.put(
+    `/advertisement/homepage-banners/${id}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return response.data;
+};
+
+export const updateWeeklyPromotionBanner = async (id: number, formData: FormData): Promise<WeeklyPromotionBanner> => {
+  const response = await apiClient.put(
+    `/advertisement/weekly-banners/${id}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return response.data;
+};
+
+export const updateThePopularBanner = async (id: number, formData: FormData): Promise<ThePopularBanner> => {
+  const response = await apiClient.put(
+    `/advertisement/popular-banners/${id}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return response.data;
+};
+
+export const updateBrandPosterBanner = async (id: number, formData: FormData): Promise<BrandPosterBanner> => {
+  const response = await apiClient.put(
+    `/advertisement/brands-banners/${id}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return response.data;
+};
+
+export const updateProductPosterAdsBanner = async (id: number, formData: FormData): Promise<ProductPosterAdsBanner> => {
+  const response = await apiClient.put(
+    `/advertisement/products-banners/${id}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return response.data;
+};

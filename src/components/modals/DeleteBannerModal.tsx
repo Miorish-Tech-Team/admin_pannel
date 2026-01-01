@@ -55,12 +55,12 @@ const DeleteBannerModal: React.FC<DeleteBannerModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-40 p-4">
-      <div className="bg-white dark:bg-gray-100 rounded-lg shadow-xl max-w-2xl w-full">
+      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full">
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex justify-between items-center p-6 border-b border-gray-200 ">
           <div className="flex items-center gap-3">
-            <div className="bg-red-100 dark:bg-red-900/20 p-2 rounded-full">
-              <FaExclamationTriangle className="text-red-600 dark:text-red-400 text-xl" />
+            <div className="bg-red-100  p-2 rounded-full">
+              <FaExclamationTriangle className="text-red-600  text-xl" />
             </div>
             <h2 className="text-xl font-bold text-gray-800 font-cinzel ">
               Delete Banner
@@ -68,7 +68,7 @@ const DeleteBannerModal: React.FC<DeleteBannerModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 text-2xl"
+            className="text-gray-500 hover:text-gray-700  text-2xl"
             disabled={loading}
           >
             <FaTimes />
@@ -80,8 +80,8 @@ const DeleteBannerModal: React.FC<DeleteBannerModalProps> = ({
          
 
           {/* Banner Preview */}
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-            <div className="bg-gray-50 dark:bg-gray-900 px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+          <div className="border border-gray-200 rounded-lg overflow-hidden">
+            <div className="bg-gray-50  px-4 py-2 border-b border-gray-200 ">
               <p className="text-sm font-medium ">
                 {bannerTypeLabels[bannerType]}
               </p>
@@ -94,13 +94,13 @@ const DeleteBannerModal: React.FC<DeleteBannerModalProps> = ({
                   className="w-32 h-20 object-cover rounded"
                 />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-800 dark:text-white mb-1">
+                  <h3 className="font-semibold text-gray-800  mb-1">
                     {banner.title}
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600 ">
                     ID: {banner.id}
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600 ">
                     Created: {new Date(banner.createdAt).toLocaleDateString()}
                   </p>
                 </div>
@@ -122,18 +122,18 @@ const DeleteBannerModal: React.FC<DeleteBannerModalProps> = ({
               className="font-mono"
             />
             {confirmText && confirmText !== "Delete" && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+              <p className="mt-2 text-sm text-red-600   ">
                 Please type exactly "Delete" to confirm
               </p>
             )}
           </div>
 
           {/* Impact Warning */}
-          <div className="bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-            <h4 className="font-semibold text-yellow-800 dark:text-yellow-300 mb-2">
+          <div className="bg-yellow-50  border border-yellow-200  rounded-lg p-4">
+            <h4 className="font-semibold text-yellow-800 mb-2">
               What will happen:
             </h4>
-            <ul className="text-sm text-yellow-700 dark:text-yellow-400 space-y-1">
+            <ul className="text-sm text-gray-700  space-y-1">
               <li>• The banner will be removed from the website</li>
               <li>• Users will no longer see this banner</li>
               <li>• The banner image will be deleted</li>
@@ -143,7 +143,7 @@ const DeleteBannerModal: React.FC<DeleteBannerModalProps> = ({
         </div>
 
         {/* Actions */}
-        <div className="flex gap-4 justify-end p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+        <div className="flex gap-4 justify-end p-6 border-t border-gray-200  bg-gray-50 ">
           <Button
             type="button"
             onClick={onClose}

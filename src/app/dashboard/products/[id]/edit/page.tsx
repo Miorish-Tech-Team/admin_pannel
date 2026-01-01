@@ -343,6 +343,11 @@ export default function EditProductPage() {
         payload.galleryImageUrls = files.galleryImages;
       }
 
+      // Add cover image if updated
+      if (files.coverImage) {
+        payload.coverImageUrl = files.coverImage;
+      }
+
       await productApi.updateProduct(productId, payload);
       toast.success("Product updated successfully!");
       router.push(`/dashboard/products/${productId}`);
@@ -1007,30 +1012,94 @@ export default function EditProductPage() {
             Images & Media
           </h2>
 
-          {/* Current Cover Image (Display Only) */}
-          {product?.coverImageUrl && (
-            <div>
-              <label
-                className="block text-sm font-medium font-poppins mb-2"
-                style={{ color: themeColors.darkgray }}
-              >
-                Cover Image (Cannot be changed)
-              </label>
-              <div className="relative w-48 h-48 rounded-lg overflow-hidden border-2 border-gray-200">
-                <Image
-                  src={product.coverImageUrl}
-                  alt="Cover image"
-                  fill
-                  sizes="192px"
-                  className="object-cover"
-                  unoptimized
-                />
+          {/* Cover Image - Now Editable */}
+          <div>
+            <label
+              className="block text-sm font-medium font-poppins mb-2"
+              style={{ color: themeColors.darkgray }}
+            >
+              Cover Image
+            </label>
+
+            {/* Show Current Cover Image */}
+            {product?.coverImageUrl && !files.coverImage && (
+              <div className="mb-4">
+                <p className="text-sm text-gray-600 mb-2 font-poppins">
+                  Current Cover Image:
+                </p>
+                <div className="relative w-48 h-48 rounded-lg overflow-hidden border-2 border-gray-200">
+                  <Image
+                    src={product.coverImageUrl}
+                    alt="Cover image"
+                    fill
+                    sizes="192px"
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
               </div>
-              <p className="text-sm text-gray-500 mt-2 font-poppins">
-                Cover image can only be set during product creation
-              </p>
+            )}
+
+            {/* Show New Cover Image Preview */}
+            {files.coverImage && (
+              <div className="mb-4">
+                <p className="text-sm text-green-600 mb-2 font-poppins">
+                  New Cover Image (will replace current):
+                </p>
+                <div className="relative w-48 h-48 rounded-lg overflow-hidden border-2 border-green-500">
+                  <Image
+                    src={URL.createObjectURL(files.coverImage)}
+                    alt="New cover image"
+                    fill
+                    sizes="192px"
+                    className="object-cover"
+                    unoptimized
+                  />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFiles((prev) => ({ ...prev, coverImage: null }))
+                    }
+                    className="absolute top-2 right-2 p-1 bg-red-500 rounded-full text-white hover:bg-red-600 transition-colors"
+                    title="Remove new cover image"
+                  >
+                    <FiX size={16} />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Upload Cover Image Button */}
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+              <input
+                type="file"
+                name="coverImage"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+                id="coverImage"
+              />
+              <label
+                htmlFor="coverImage"
+                className="cursor-pointer flex flex-col items-center gap-2"
+              >
+                <FiUpload size={32} style={{ color: themeColors.primeGold }} />
+                <span
+                  className="font-poppins"
+                  style={{ color: themeColors.darkgray }}
+                >
+                  {files.coverImage
+                    ? "Change cover image"
+                    : product?.coverImageUrl
+                    ? "Update cover image"
+                    : "Upload cover image"}
+                </span>
+                <span className="text-xs text-gray-500 font-poppins">
+                  Click to select a new cover image
+                </span>
+              </label>
             </div>
-          )}
+          </div>
 
           {/* Gallery Images */}
           <div>

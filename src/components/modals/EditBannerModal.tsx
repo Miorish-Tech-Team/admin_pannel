@@ -1,32 +1,46 @@
 "use client";
 
-import React, { useState, useRef } from "react";
-import { FaUpload, FaTimes, FaImage } from "react-icons/fa";
+import React, { useState, useRef, useEffect } from "react";
+import { FaUpload, FaTimes, FaImage, FaEdit } from "react-icons/fa";
 import {
-  addHomepageBanner,
-  addWeeklyPromotionBanner,
-  addThePopularBanner,
-  addBrandPosterBanner,
-  addProductPosterAdsBanner,
+  updateHomepageBanner,
+  updateWeeklyPromotionBanner,
+  updateThePopularBanner,
+  updateBrandPosterBanner,
+  updateProductPosterAdsBanner,
+  type HomepageBanner,
+  type WeeklyPromotionBanner,
+  type ThePopularBanner,
+  type BrandPosterBanner,
+  type ProductPosterAdsBanner,
 } from "@/store/apis/banner/bannerApi";
 import { useToast, Button, Input } from "@/components/atoms";
 
 type BannerType = "homepage" | "weekly" | "popular" | "brand" | "product";
 
-interface AddBannerModalProps {
+type Banner =
+  | HomepageBanner
+  | WeeklyPromotionBanner
+  | ThePopularBanner
+  | BrandPosterBanner
+  | ProductPosterAdsBanner;
+
+interface EditBannerModalProps {
+  banner: Banner;
   bannerType: BannerType;
   onClose: () => void;
   onSuccess: () => void;
 }
 
-const AddBannerModal: React.FC<AddBannerModalProps> = ({
+const EditBannerModal: React.FC<EditBannerModalProps> = ({
+  banner,
   bannerType,
   onClose,
   onSuccess,
 }) => {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(banner.title);
   const [image, setImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(banner.image);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { showToast } = useToast();
@@ -71,7 +85,7 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
 
   const handleRemoveImage = () => {
     setImage(null);
-    setImagePreview(null);
+    setImagePreview(banner.image);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -85,39 +99,38 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
       return;
     }
 
-    if (!image) {
-      showToast("Please select an image", "error");
-      return;
-    }
-
     setLoading(true);
     try {
       const formData = new FormData();
       formData.append("title", title);
-      formData.append("image", image);
+      
+      // Only append image if a new one was selected
+      if (image) {
+        formData.append("image", image);
+      }
 
       switch (bannerType) {
         case "homepage":
-          await addHomepageBanner(formData);
+          await updateHomepageBanner(banner.id, formData);
           break;
         case "weekly":
-          await addWeeklyPromotionBanner(formData);
+          await updateWeeklyPromotionBanner(banner.id, formData);
           break;
         case "popular":
-          await addThePopularBanner(formData);
+          await updateThePopularBanner(banner.id, formData);
           break;
         case "brand":
-          await addBrandPosterBanner(formData);
+          await updateBrandPosterBanner(banner.id, formData);
           break;
         case "product":
-          await addProductPosterAdsBanner(formData);
+          await updateProductPosterAdsBanner(banner.id, formData);
           break;
       }
 
       onSuccess();
     } catch (error: any) {
       showToast(
-        error.response?.data?.message || "Failed to add banner",
+        error.response?.data?.message || "Failed to update banner",
         "error"
       );
     } finally {
@@ -131,7 +144,7 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-gray-200 ">
           <h2 className="text-xl font-bold text-gray-800 ">
-            Add {bannerTypeLabels[bannerType]}
+            Edit {bannerTypeLabels[bannerType]}
           </h2>
           <button
             onClick={onClose}
@@ -157,42 +170,53 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
             />
           </div>
 
-          {/* Image Upload */}
+          {/* Image Upload/Update */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Banner Image <span className="text-red-500">*</span>
+              Banner Image
             </label>
             <div className="space-y-4">
-              {imagePreview ? (
+              {imagePreview && (
                 <div className="relative">
                   <img
                     src={imagePreview}
                     alt="Preview"
                     className="w-full h-64 object-cover rounded-lg"
                   />
-                  <button
-                    type="button"
-                    onClick={handleRemoveImage}
-                    className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
-                    disabled={loading}
-                  >
-                    <FaTimes />
-                  </button>
-                </div>
-              ) : (
-                <div
-                  onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-gray-300  rounded-lg p-8 text-center cursor-pointer hover:border-blue-500  transition-colors"
-                >
-                  <FaImage className="mx-auto text-4xl text-gray-400 mb-4" />
-                  <p className="text-gray-600  mb-2">
-                    Click to upload banner image
-                  </p>
-                  <p className="text-sm text-gray-500 ">
-                    PNG, JPG or WEBP (Max 5MB)
-                  </p>
+                  {image && (
+                    <button
+                      type="button"
+                      onClick={handleRemoveImage}
+                      className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
+                      disabled={loading}
+                    >
+                      <FaTimes />
+                    </button>
+                  )}
+                  {image && (
+                    <div className="absolute bottom-2 left-2 bg-green-500 text-white px-3 py-1 rounded-full text-sm">
+                      New Image
+                    </div>
+                  )}
                 </div>
               )}
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="border-2 border-dashed border-gray-300  rounded-lg p-6 text-center cursor-pointer hover:border-blue-500  transition-colors"
+              >
+                <FaImage className="mx-auto text-3xl text-gray-400 mb-2" />
+                <p className="text-gray-600  mb-1">
+                  {image ? "Click to change image" : "Click to update banner image"}
+                </p>
+                <p className="text-sm text-gray-500 ">
+                  PNG, JPG or WEBP (Max 5MB)
+                </p>
+                {!image && (
+                  <p className="text-xs text-gray-400 mt-2">
+                    Leave unchanged to keep current image
+                  </p>
+                )}
+              </div>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -235,12 +259,12 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
               {loading ? (
                 <>
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-r-transparent"></div>
-                  Uploading...
+                  Updating...
                 </>
               ) : (
                 <>
-                  <FaUpload />
-                  Add Banner
+                  <FaEdit />
+                  Update Banner
                 </>
               )}
             </Button>
@@ -251,4 +275,4 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
   );
 };
 
-export default AddBannerModal;
+export default EditBannerModal;

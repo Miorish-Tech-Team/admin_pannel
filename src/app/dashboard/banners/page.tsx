@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { FaPlus, FaTrash, FaImage } from "react-icons/fa";
+import { FaPlus, FaTrash, FaImage, FaEdit } from "react-icons/fa";
 import {
   getHomepageBanners,
   getWeeklyPromotionBanners,
@@ -17,7 +17,7 @@ import {
   type BrandPosterBanner,
 } from "@/store/apis/banner/bannerApi";
 import { useToast, Button } from "@/components/atoms";
-import { AddBannerModal, DeleteBannerModal } from "@/components/modals";
+import { AddBannerModal, EditBannerModal, DeleteBannerModal } from "@/components/modals";
 
 type BannerType = "homepage" | "weekly" | "popular" | "brand" ;
 
@@ -39,6 +39,7 @@ const BannerManagement = () => {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [loading, setLoading] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedBanner, setSelectedBanner] = useState<Banner | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -110,6 +111,18 @@ const BannerManagement = () => {
     setShowAddModal(false);
     fetchBanners();
     showToast("Banner added successfully", "success");
+  };
+
+  const handleEditClick = (banner: Banner) => {
+    setSelectedBanner(banner);
+    setShowEditModal(true);
+  };
+
+  const handleEditSuccess = () => {
+    setShowEditModal(false);
+    setSelectedBanner(null);
+    fetchBanners();
+    showToast("Banner updated successfully", "success");
   };
 
   const handleDeleteClick = (banner: Banner) => {
@@ -210,14 +223,24 @@ const BannerManagement = () => {
                 <p className="text-sm text-gray-600 mb-4">
                   Created: {new Date(banner.createdAt).toLocaleDateString()}
                 </p>
-                <Button
-                  onClick={() => handleDeleteClick(banner)}
-                  variant="danger"
-                  className="w-full flex items-center justify-center gap-2"
-                >
-                  <FaTrash />
-                  Delete
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => handleEditClick(banner)}
+                    variant="secondary"
+                    className="flex-1 flex items-center justify-center gap-2"
+                  >
+                    <FaEdit />
+                    Edit
+                  </Button>
+                  <Button
+                    onClick={() => handleDeleteClick(banner)}
+                    variant="danger"
+                    className="flex-1 flex items-center justify-center gap-2"
+                  >
+                    <FaTrash />
+                    Delete
+                  </Button>
+                </div>
               </div>
             </div>
           ))}
@@ -230,6 +253,19 @@ const BannerManagement = () => {
           bannerType={activeTab}
           onClose={() => setShowAddModal(false)}
           onSuccess={handleAddSuccess}
+        />
+      )}
+
+      {/* Edit Banner Modal */}
+      {showEditModal && selectedBanner && (
+        <EditBannerModal
+          banner={selectedBanner}
+          bannerType={activeTab}
+          onClose={() => {
+            setShowEditModal(false);
+            setSelectedBanner(null);
+          }}
+          onSuccess={handleEditSuccess}
         />
       )}
 

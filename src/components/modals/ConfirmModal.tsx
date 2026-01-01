@@ -66,16 +66,16 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       className="fixed inset-0 z-9998 flex items-center justify-center bg-black/50  backdrop-blur-sm animate-fadeIn"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl max-w-md w-full mx-4 animate-scaleIn">
+      <div className="bg-white rounded-lg shadow-2xl max-w-md w-full mx-4 animate-scaleIn">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 ">
+          <h3 className="text-xl font-semibold text-gray-900">
             {title}
           </h3>
           <button
             onClick={onClose}
             disabled={isLoading}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors disabled:opacity-50"
+            className="text-gray-400 hover:text-gray-600  transition-colors disabled:opacity-50"
             aria-label="Close modal"
           >
             <svg
@@ -97,9 +97,9 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         {/* Body */}
         <div className="p-6">
           <div className="flex items-start gap-4">
-            <div className="shrink-0 w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+            <div className="shrink-0 w-12 h-12 rounded-full bg-red-100  flex items-center justify-center">
               <svg
-                className="w-6 h-6 text-red-600 dark:text-red-400"
+                className="w-6 h-6 text-red-600 "
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -113,7 +113,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
               </svg>
             </div>
             <div className="flex-1">
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+              <p className="text-gray-700  leading-relaxed">
                 {message}
               </p>
             </div>
@@ -121,11 +121,11 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 rounded-b-lg">
+        <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200  bg-gray-50  rounded-b-lg">
           <button
             onClick={onClose}
             disabled={isLoading}
-            className="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-5 py-2.5 text-sm font-medium text-gray-700  bg-white  border border-gray-300  rounded-lg hover:bg-gray-100  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {cancelText}
           </button>
