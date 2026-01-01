@@ -23,6 +23,8 @@ export interface Order {
   orderDate: string;
   shippingDate?: string;
   deliveryDate?: string;
+  shippingCost?: number;
+  appliedCouponId?: number;
   createdAt: string;
   updatedAt: string;
   User?: {
@@ -42,6 +44,13 @@ export interface Order {
     country: string;
   };
   orderItems?: OrderItem[];
+  Payment?: {
+    id: number;
+    paymentMethod: string;
+    paymentStatus: string;
+    paymentDate?: string;
+    paymentReferenceId?: string;
+  };
 }
 
 export interface GetOrdersResponse {

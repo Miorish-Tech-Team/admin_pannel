@@ -267,7 +267,7 @@ export default function OrdersPage() {
                 <tr>
                   <td colSpan={7} className="px-4 py-8 text-center">
                     <div className="flex flex-col items-center justify-center">
-                      <FiPackage size={48} style={{ color: colors.lightgray }} className="mb-3" />
+                      <FiPackage size={48} style={{ color: "#6B7280" }} className="mb-3" />
                       <p className="font-poppins" style={{ color: colors.darkgray }}>
                         No orders found
                       </p>
@@ -469,7 +469,7 @@ export default function OrdersPage() {
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div>
-                    <p className="text-sm font-poppins" style={{ color: colors.lightgray }}>
+                    <p className="text-sm font-poppins" style={{ color: "#6B7280" }}>
                       Order ID
                     </p>
                     <p className="font-poppins font-medium" style={{ color: colors.darkgray }}>
@@ -477,7 +477,7 @@ export default function OrdersPage() {
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-poppins" style={{ color: colors.lightgray }}>
+                    <p className="text-sm font-poppins" style={{ color: "#6B7280" }}>
                       Order Status
                     </p>
                     <span
@@ -491,7 +491,7 @@ export default function OrdersPage() {
                     </span>
                   </div>
                   <div>
-                    <p className="text-sm font-poppins" style={{ color: colors.lightgray }}>
+                    <p className="text-sm font-poppins" style={{ color: "#6B7280" }}>
                       Payment Status
                     </p>
                     <span
@@ -505,13 +505,33 @@ export default function OrdersPage() {
                     </span>
                   </div>
                   <div>
-                    <p className="text-sm font-poppins" style={{ color: colors.lightgray }}>
+                    <p className="text-sm font-poppins" style={{ color: "#6B7280" }}>
                       Order Date
                     </p>
                     <p className="font-poppins font-medium" style={{ color: colors.darkgray }}>
-                      {new Date(selectedOrder.createdAt).toLocaleDateString()}
+                      {new Date(selectedOrder.orderDate || selectedOrder.createdAt).toLocaleDateString()}
                     </p>
                   </div>
+                  {selectedOrder.shippingDate && (
+                    <div>
+                      <p className="text-sm font-poppins" style={{ color: "#6B7280" }}>
+                        Shipping Date
+                      </p>
+                      <p className="font-poppins font-medium" style={{ color: colors.darkgray }}>
+                        {new Date(selectedOrder.shippingDate).toLocaleDateString()}
+                      </p>
+                    </div>
+                  )}
+                  {selectedOrder.deliveryDate && (
+                    <div>
+                      <p className="text-sm font-poppins" style={{ color: "#6B7280" }}>
+                        Delivery Date
+                      </p>
+                      <p className="font-poppins font-medium" style={{ color: colors.darkgray }}>
+                        {new Date(selectedOrder.deliveryDate).toLocaleDateString()}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -525,7 +545,7 @@ export default function OrdersPage() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <p className="text-sm font-poppins" style={{ color: colors.lightgray }}>
+                    <p className="text-sm font-poppins" style={{ color: "#6B7280" }}>
                       Full Name
                     </p>
                     <p className="font-poppins font-medium" style={{ color: colors.darkgray }}>
@@ -533,7 +553,7 @@ export default function OrdersPage() {
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-poppins" style={{ color: colors.lightgray }}>
+                    <p className="text-sm font-poppins" style={{ color: "#6B7280" }}>
                       Email
                     </p>
                     <p className="font-poppins font-medium" style={{ color: colors.darkgray }}>
@@ -541,7 +561,7 @@ export default function OrdersPage() {
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-poppins" style={{ color: colors.lightgray }}>
+                    <p className="text-sm font-poppins" style={{ color: "#6B7280" }}>
                       Phone
                     </p>
                     <p className="font-poppins font-medium" style={{ color: colors.darkgray }}>
@@ -562,7 +582,7 @@ export default function OrdersPage() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm font-poppins" style={{ color: colors.lightgray }}>
+                      <p className="text-sm font-poppins" style={{ color: "#6B7280" }}>
                         Recipient Name
                       </p>
                       <p className="font-poppins font-medium" style={{ color: colors.darkgray }}>
@@ -570,7 +590,7 @@ export default function OrdersPage() {
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm font-poppins" style={{ color: colors.lightgray }}>
+                      <p className="text-sm font-poppins" style={{ color: "#6B7280" }}>
                         Phone Number
                       </p>
                       <p className="font-poppins font-medium" style={{ color: colors.darkgray }}>
@@ -578,7 +598,7 @@ export default function OrdersPage() {
                       </p>
                     </div>
                     <div className="md:col-span-2">
-                      <p className="text-sm font-poppins" style={{ color: colors.lightgray }}>
+                      <p className="text-sm font-poppins" style={{ color: "#6B7280" }}>
                         Complete Address
                       </p>
                       <p className="font-poppins font-medium" style={{ color: colors.darkgray }}>
@@ -605,23 +625,23 @@ export default function OrdersPage() {
                       key={index}
                       className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"
                     >
-                      {item.Product?.images?.[0] && (
+                      {(item.productImageUrl || item.product?.coverImageUrl) && (
                         <img
-                          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${item.Product.images[0]}`}
-                          alt={item.Product.title}
+                          src={item.productImageUrl || item.product?.coverImageUrl}
+                          alt={item.productName || item.product?.productName}
                           className="w-16 h-16 object-cover rounded"
                         />
                       )}
                       <div className="flex-1">
                         <p className="font-poppins font-medium" style={{ color: colors.darkgray }}>
-                          {item.Product?.title || "N/A"}
+                          {item.productName || item.product?.productName || "N/A"}
                         </p>
-                        <p className="text-sm font-poppins" style={{ color: colors.lightgray }}>
-                          Quantity: {item.quantity} × ₹{item.priceAtPurchase}
+                        <p className="text-sm font-poppins" style={{ color: "#6B7280" }}>
+                          Quantity: {item.quantity} × ₹{item.price}
                         </p>
                       </div>
                       <p className="font-poppins font-semibold" style={{ color: colors.primeGreen }}>
-                        ₹{(item.quantity * item.priceAtPurchase).toFixed(2)}
+                        ₹{item.totalPrice?.toFixed(2) || (item.quantity * item.price).toFixed(2)}
                       </p>
                     </div>
                   ))}
@@ -635,7 +655,7 @@ export default function OrdersPage() {
                 </h3>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <p className="font-poppins" style={{ color: colors.lightgray }}>
+                    <p className="font-poppins" style={{ color: "#6B7280" }}>
                       Payment Method
                     </p>
                     <p className="font-poppins font-medium" style={{ color: colors.darkgray }}>
@@ -643,11 +663,38 @@ export default function OrdersPage() {
                     </p>
                   </div>
                   <div className="flex justify-between">
-                    <p className="font-poppins" style={{ color: colors.lightgray }}>
+                    <p className="font-poppins" style={{ color: "#6B7280" }}>
+                      Payment Status
+                    </p>
+                    <p className="font-poppins font-medium" style={{ color: selectedOrder.paymentStatus === 'Completed' ? colors.primeGreen : colors.darkgray }}>
+                      {selectedOrder.paymentStatus}
+                    </p>
+                  </div>
+                  {selectedOrder.Payment?.paymentReferenceId && (
+                    <div className="flex justify-between">
+                      <p className="font-poppins" style={{ color: "#6B7280" }}>
+                        Transaction ID
+                      </p>
+                      <p className="font-poppins font-medium text-sm" style={{ color: colors.darkgray }}>
+                        {selectedOrder.Payment.paymentReferenceId}
+                      </p>
+                    </div>
+                  )}
+                  <div className="border-t pt-2 mt-2" style={{ borderColor: colors.lightgray }}></div>
+                  <div className="flex justify-between">
+                    <p className="font-poppins" style={{ color: "#6B7280" }}>
                       Subtotal
                     </p>
                     <p className="font-poppins font-medium" style={{ color: colors.darkgray }}>
-                      ₹{selectedOrder.totalAmount.toFixed(2)}
+                      ₹{((selectedOrder.totalAmount || 0) - (selectedOrder.shippingCost || 0)).toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex justify-between">
+                    <p className="font-poppins" style={{ color: "#6B7280" }}>
+                      Shipping Charges
+                    </p>
+                    <p className="font-poppins font-medium" style={{ color: selectedOrder.shippingCost === 0 ? colors.primeGreen : colors.darkgray }}>
+                      {selectedOrder.shippingCost === 0 || !selectedOrder.shippingCost ? 'FREE' : `₹${selectedOrder.shippingCost.toFixed(2)}`}
                     </p>
                   </div>
                   <div className="flex justify-between pt-2 border-t" style={{ borderColor: colors.lightgray }}>
@@ -667,3 +714,4 @@ export default function OrdersPage() {
     </div>
   );
 }
+
