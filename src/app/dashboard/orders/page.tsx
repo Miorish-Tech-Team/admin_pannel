@@ -287,7 +287,7 @@ export default function OrdersPage() {
                         <div className="font-poppins text-sm font-medium" style={{ color: colors.darkgray }}>
                           {order.User?.fullName}
                         </div>
-                        <div className="font-poppins text-xs" style={{ color: colors.lightgray }}>
+                        <div className="font-poppins text-xs" style={{ color: colors.primeGreen }}>
                           {order.User?.email}
                         </div>
                       </div>
