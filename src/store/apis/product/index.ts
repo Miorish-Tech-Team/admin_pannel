@@ -42,7 +42,12 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
   category?: {
+    id: number;
     categoryName: string;
+  };
+  subcategory?: {
+    id: number;
+    subCategoryName: string;
   };
 }
 
@@ -132,7 +137,8 @@ export const productApi = {
   // Get product by ID
   getProductById: async (id: number): Promise<Product> => {
     const response = await apiClient.get(`/admin/dashboard/products/${id}`);
-    return response.data;
+    // Backend returns shape: { success, product }
+    return response.data.product ?? response.data;
   },
 
   // Get product count

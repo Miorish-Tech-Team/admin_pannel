@@ -199,6 +199,28 @@ export default function ViewProductPage() {
             
             <p className="font-poppins text-gray-700">{product.productDescription}</p>
             
+            {/* Category and Subcategory */}
+            {(product.category || product.subcategory) && (
+              <div className="flex gap-4 pt-2">
+                {product.category && (
+                  <div>
+                    <p className="text-sm font-poppins text-gray-500">Category</p>
+                    <p className="font-poppins font-semibold" style={{ color: colors.primeGreen }}>
+                      {product.category.categoryName}
+                    </p>
+                  </div>
+                )}
+                {product.subcategory && (
+                  <div>
+                    <p className="text-sm font-poppins text-gray-500">Subcategory</p>
+                    <p className="font-poppins font-semibold" style={{ color: colors.primeGreen }}>
+                      {product.subcategory.subCategoryName}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+            
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t">
               <div>
                 <p className="text-sm font-poppins text-gray-500">Price</p>

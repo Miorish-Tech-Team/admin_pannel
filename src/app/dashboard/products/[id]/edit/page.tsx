@@ -287,6 +287,11 @@ export default function EditProductPage() {
         status: formData.status,
       };
 
+      // Ensure category is also updated when changed
+      if (selectedCategoryId) {
+        payload.productCategoryId = Number(selectedCategoryId);
+      }
+
       // Add optional fields
       if (formData.productDiscountPercentage)
         payload.productDiscountPercentage = Number(

@@ -51,10 +51,8 @@ function ProductsPageContent() {
 
     if (category) {
       setCategoryFilter(category);
-      fetchProductsByCategory(category);
     } else if (subcategory) {
       setSubcategoryFilter(subcategory);
-      fetchProductsBySubCategory(subcategory);
     } else {
       fetchProducts();
     }
@@ -62,7 +60,7 @@ function ProductsPageContent() {
 
   useEffect(() => {
     filterProducts();
-  }, [products, statusFilter, searchQuery]);
+  }, [products, statusFilter, searchQuery, categoryFilter, subcategoryFilter]);
 
   const fetchProducts = async () => {
     try {
@@ -133,21 +131,11 @@ function ProductsPageContent() {
           console.error("Failed to fetch subcategories:", error);
         }
       }
-      fetchProductsByCategory(categoryName);
-    } else {
-      fetchProducts();
     }
   };
 
   const handleSubcategoryChange = (subcategoryName: string) => {
     setSubcategoryFilter(subcategoryName);
-    if (subcategoryName) {
-      fetchProductsBySubCategory(subcategoryName);
-    } else if (categoryFilter) {
-      fetchProductsByCategory(categoryFilter);
-    } else {
-      fetchProducts();
-    }
   };
 
   const clearFilters = () => {
@@ -174,6 +162,20 @@ function ProductsPageContent() {
           p.productName.toLowerCase().includes(query) ||
           p.productCode.toLowerCase().includes(query) ||
           p.productBrand.toLowerCase().includes(query)
+      );
+    }
+
+    // Category filter (uses joined category relation from admin API)
+    if (categoryFilter) {
+      filtered = filtered.filter(
+        (p) => p.category?.categoryName === categoryFilter
+      );
+    }
+
+    // Subcategory filter
+    if (subcategoryFilter) {
+      filtered = filtered.filter(
+        (p) => p.subcategory?.subCategoryName === subcategoryFilter
       );
     }
 
@@ -538,6 +540,12 @@ function ProductsPageContent() {
                     className="px-6 py-3 text-left text-sm font-semibold font-poppins"
                     style={{ color: colors.darkgray }}
                   >
+                    Subcategory
+                  </th>
+                  <th
+                    className="px-6 py-3 text-left text-sm font-semibold font-poppins"
+                    style={{ color: colors.darkgray }}
+                  >
                     Price
                   </th>
                   <th
@@ -601,6 +609,11 @@ function ProductsPageContent() {
                     <td className="px-6 py-4">
                       <p className="text-sm font-poppins text-gray-600">
                         {product.productCode}
+                      </p>
+                    </td>
+                    <td className="px-6 py-4">
+                      <p className="text-sm font-poppins text-gray-600">
+                        {product.subcategory?.subCategoryName ?? "-"}
                       </p>
                     </td>
                     <td className="px-6 py-4">
