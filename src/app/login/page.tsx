@@ -23,7 +23,7 @@ export default function LoginPage() {
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationError, setVerificationError] = useState("");
   const [twoFactorMethod, setTwoFactorMethod] = useState<"email" | "authenticator">("authenticator");
-  const [userId, setUserId] = useState<string>("");
+  const [userId, setUserId] = useState<number | undefined>(undefined);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -71,7 +71,7 @@ export default function LoginPage() {
       // Check if 2FA is required
       if (response.isTwoFactorAuthEnable) {
         setTwoFactorMethod("authenticator");
-        setUserId(response.userId || "");
+        setUserId(response.userId);
         setShow2FAModal(true);
         setIsLoading(false);
         return;
