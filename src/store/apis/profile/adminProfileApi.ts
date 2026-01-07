@@ -47,6 +47,10 @@ export interface ApiResponse<T = any> {
   success: boolean;
   message: string;
   user?: T;
+  qrCode?: string;
+  secret?: string;
+  isTwoFactorAuthEnable?: boolean;
+  twoFactorMethod?: "email" | "authenticator";
 }
 
 // Helper functions to call API without hooks
