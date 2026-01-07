@@ -16,6 +16,7 @@ import {
   FiMenu,
   FiX,
   FiMapPin,
+  FiUser,
 } from "react-icons/fi";
 import { GiKnightBanner } from "react-icons/gi";
 import { FaBlog } from "react-icons/fa";
@@ -28,9 +29,10 @@ interface SidebarProps {
 
 const menuItems = [
   { name: "Dashboard", path: "/dashboard", icon: FiHome },
-  { name: "User Management", path: "/dashboard/users", icon: FiUsers },
+  { name: "My Profile", path: "/dashboard/profile", icon: FiUser },
+  { name: "User", path: "/dashboard/users", icon: FiUsers },
   {
-    name: "Seller Management",
+    name: "Seller",
     icon: FiShoppingBag,
     submenu: [
       { name: "Pending Approvals", path: "/dashboard/sellers/pending" },
@@ -39,9 +41,9 @@ const menuItems = [
       { name: "Membership Plans", path: "/dashboard/sellers/membership" },
     ],
   },
-  { name: "Order Management", path: "/dashboard/orders", icon: FiPackage },
+  { name: "Order", path: "/dashboard/orders", icon: FiPackage },
   {
-    name: "Product Management",
+    name: "Product",
     icon: FiTag,
     submenu: [
       { name: "Categories", path: "/dashboard/categories" },
@@ -52,10 +54,10 @@ const menuItems = [
     ],
   },
   { name: "Handle Banners", path: "/dashboard/banners", icon: GiKnightBanner },
-  { name: "Blog Management", path: "/dashboard/blogs", icon: FaBlog },
-  { name: "Warehouse Management", path: "/dashboard/warehouses", icon: FiMapPin },
+  { name: "Blog", path: "/dashboard/blogs", icon: FaBlog },
+  { name: "Warehouse", path: "/dashboard/warehouses", icon: FiMapPin },
   {
-    name: "Support Management",
+    name: "Support",
     icon: FiHelpCircle,
     submenu: [
       { name: "Seller Support", path: "/dashboard/support/seller" },

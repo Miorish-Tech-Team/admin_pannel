@@ -16,6 +16,14 @@ export default function LoginPage() {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
+  
+  // 2FA States
+  const [show2FAModal, setShow2FAModal] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [verificationError, setVerificationError] = useState("");
+  const [twoFactorMethod, setTwoFactorMethod] = useState<"email" | "authenticator">("authenticator");
+  const [userId, setUserId] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -58,8 +66,18 @@ export default function LoginPage() {
 
     try {
       const response = await authApi.signIn(formData);
-      console.log("Login successful:", response);
-      // Redirect to dashboard
+      console.log("Login response:", response);
+      
+      // Check if 2FA is required
+      if (response.isTwoFactorAuthEnable) {
+        setTwoFactorMethod("authenticator");
+        setUserId(response.userId || "");
+        setShow2FAModal(true);
+        setIsLoading(false);
+        return;
+      }
+      
+      // Redirect to dashboard if no 2FA
       router.push("/dashboard");
     } catch (error: any) {
       console.error("Login error:", error);
@@ -70,6 +88,34 @@ export default function LoginPage() {
       );
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleVerify2FA = async () => {
+    if (!verificationCode || verificationCode.length !== 6) {
+      setVerificationError("Please enter a valid 6-digit code");
+      return;
+    }
+
+    setIsVerifying(true);
+    setVerificationError("");
+
+    try {
+      // Pass userId for authenticator method verification
+      await authApi.verify2FA({ 
+        verificationCode,
+        userId
+      });
+      // Redirect to dashboard after successful verification
+      router.push("/dashboard");
+    } catch (error: any) {
+      console.error("2FA verification error:", error);
+      setVerificationError(
+        error.response?.data?.message ||
+          "Invalid or expired verification code. Please try again."
+      );
+    } finally {
+      setIsVerifying(false);
     }
   };
 
@@ -160,6 +206,90 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+
+      {/* 2FA Verification Modal */}
+      {show2FAModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div
+            className="w-full max-w-md rounded-lg shadow-xl p-6"
+            style={{ backgroundColor: colors.white }}
+          >
+            <h3 className="text-xl font-cinzel font-semibold mb-2" style={{ color: colors.primeGreen }}>
+              Two-Factor Authentication
+            </h3>
+            <p className="mb-6 font-poppins text-sm" style={{ color: colors.darkgray }}>
+              Please enter the 6-digit code from your authenticator app to complete your login.
+            </p>
+
+            {verificationError && (
+              <div className="mb-4 p-4 rounded-lg" style={{ backgroundColor: "#fee", color: "#c33" }}>
+                <p className="font-poppins text-sm">{verificationError}</p>
+              </div>
+            )}
+
+            <div className="mb-6">
+              <label className="block text-sm font-poppins font-medium mb-2" style={{ color: colors.darkgray }}>
+                Verification Code
+              </label>
+              <input
+                type="text"
+                value={verificationCode}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, "").slice(0, 6);
+                  setVerificationCode(value);
+                  setVerificationError("");
+                }}
+                className="w-full px-4 py-3 rounded-lg font-poppins text-center text-2xl tracking-widest focus:outline-none focus:ring-2"
+                style={{
+                  backgroundColor: colors.base,
+                  border: `1px solid ${colors.lightgray}`,
+                  color: colors.darkgray,
+                }}
+                placeholder="000000"
+                maxLength={6}
+                autoFocus
+                onKeyPress={(e) => {
+                  if (e.key === "Enter" && verificationCode.length === 6) {
+                    handleVerify2FA();
+                  }
+                }}
+              />
+              <p className="mt-2 text-xs font-poppins text-center" style={{ color: colors.darkgray }}>
+                Enter the 6-digit code from your authenticator app
+              </p>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={handleVerify2FA}
+                disabled={isVerifying || verificationCode.length !== 6}
+                className="flex-1 px-4 py-3 rounded-lg font-poppins font-medium transition-colors disabled:opacity-50"
+                style={{
+                  backgroundColor: colors.primeGreen,
+                  color: colors.white,
+                }}
+              >
+                {isVerifying ? "Verifying..." : "Verify & Login"}
+              </button>
+              <button
+                onClick={() => {
+                  setShow2FAModal(false);
+                  setVerificationCode("");
+                  setVerificationError("");
+                }}
+                disabled={isVerifying}
+                className="px-4 py-3 rounded-lg font-poppins font-medium transition-colors"
+                style={{
+                  backgroundColor: colors.base,
+                  color: colors.darkgray,
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

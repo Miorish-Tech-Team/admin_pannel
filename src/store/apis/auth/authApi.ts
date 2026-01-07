@@ -7,11 +7,19 @@ export interface SignInPayload {
 
 export interface SignInResponse {
   message: string;
+  isTwoFactorAuthEnable?: boolean;
+  twoFactorMethod?: "email" | "authenticator";
+  userId?: number;
   user?: {
     id: number;
     email: string;
     role: string;
   };
+}
+
+export interface Verify2FAPayload {
+  verificationCode: string;
+  userId?: number;
 }
 
 export interface LogoutResponse {
@@ -21,6 +29,11 @@ export interface LogoutResponse {
 export const authApi = {
   signIn: async (payload: SignInPayload): Promise<SignInResponse> => {
     const response = await apiClient.post("/auth/signin", payload);
+    return response.data;
+  },
+
+  verify2FA: async (payload: Verify2FAPayload): Promise<SignInResponse> => {
+    const response = await apiClient.patch("/auth/verify-two-factor", payload);
     return response.data;
   },
 
